@@ -21,6 +21,23 @@
   --baby-pink-700: #e64b7f;
 }
 
+/* Hero/product fade-up animation */
+@keyframes fade-up {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease-out forwards;
+}
+
+.divider {
+  background: linear-gradient(90deg, transparent, var(--baby-pink-200), transparent);
+  height: 1px;
+  opacity: 0.5;
+}
+
+
 /* ✨ Global Base */
 html,
 body {

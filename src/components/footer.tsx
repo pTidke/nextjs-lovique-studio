@@ -10,7 +10,7 @@ export default function Footer() {
           Wrapped in grace, sealed with love — where flowers meet forever.
         </p>
 
-        <div className="flex justify-center gap-6 mt-4 text-sm">
+        {/* <div className="flex justify-center gap-6 mt-4 text-sm">
           <a
             href="https://www.instagram.com/"
             target="_blank"
@@ -33,7 +33,7 @@ export default function Footer() {
           >
             Email
           </a>
-        </div>
+        </div> */}
 
         <p className="mt-6 text-xs text-gray-400">
           © {new Date().getFullYear()} Lovique Studio. All rights reserved.

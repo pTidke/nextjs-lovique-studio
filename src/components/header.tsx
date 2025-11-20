@@ -63,7 +63,7 @@ export default function Header() {
         {/* Left: Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/logo.jpg"
+            src="/logo.png"
             alt="Lovique Studio Logo"
             width={56}
             height={56}

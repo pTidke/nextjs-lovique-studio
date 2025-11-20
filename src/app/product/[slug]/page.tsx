@@ -74,75 +74,74 @@ export default async function ProductPage({
 
   // Render
   return (
-    <section className="min-h-screen bg-gradient-to-b from-pink-50/50 to-white md:pt-24 pt-16 pb-24 px-6 flex justify-center">
-      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        {/* LEFT: Carousel */}
-        {images?.length ? (
-          <div className="flex justify-center lg:justify-end z-0">
-            <Carousel images={images} name={name} />
-          </div>
-        ) : (
-          <div className="flex items-center justify-center text-gray-400">
-            No image available
-          </div>
-        )}
+    <section className="min-h-[75vh] bg-gradient-to-b from-[var(--baby-pink-50)]/60 to-white md:pt-20 pt-16 pb-28 px-6 flex justify-center relative overflow-hidden">
+      {/* Ambient background petals (optional aesthetic layer) */}
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(255,173,200,0.2)_0%,transparent_70%)]" />
 
-        {/* RIGHT: Product Details */}
-        <div className="relative z-10 max-w-lg mx-auto lg:mx-0 text-center lg:text-left flex flex-col justify-center space-y-6">
+      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 md:gap-20 items-center">
+        {/* LEFT — Product Image Carousel */}
+        <div className="relative flex justify-center lg:justify-end">
+          <div className="absolute -inset-6 blur-3xl bg-[var(--baby-pink-100)]/40 rounded-full -z-10" />
+          <Carousel images={images} name={name} />
+        </div>
+
+        {/* RIGHT — Product Info */}
+        <div className="flex flex-col justify-center text-center lg:text-left px-4 lg:px-0 space-y-5 animate-[fade-up_0.7s_ease-out_forwards]">
           <h1
-            className={`${playfair.className} text-4xl -mt-6 md:mt-0 font-semibold text-gray-900`}
+            className={`${playfair.className} text-4xl md:text-5xl font-semibold text-gray-900 leading-tight`}
           >
             {name}
           </h1>
 
-            {theme && (
+          {theme && (
             <span
-                className="mt-2 self-start rounded-full bg-[var(--baby-pink-100)] text-[var(--baby-pink-600)]
-                        px-4 py-1.5 text-sm font-medium tracking-wide border border-[var(--baby-pink-300)]
-                        shadow-sm hover:shadow-md hover:bg-[var(--baby-pink-200)] transition
-                        mx-auto lg:mx-0 w-auto"
+              className="mx-auto self-start lg:mx-0 inline-flex items-center gap-2 rounded-full bg-[var(--baby-pink-100)]
+                     text-[var(--baby-pink-600)] px-4 py-1.5 text-sm font-medium tracking-wide
+                     border border-[var(--baby-pink-300)] shadow-sm hover:shadow-md hover:bg-[var(--baby-pink-200)]
+                     transition w-auto"
             >
-                {theme}
+              🌸 {theme}
             </span>
-            )}
+          )}
 
-            
-          <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+          <div className="h-[1px] bg-[var(--baby-pink-200)] w-24 mx-auto lg:mx-0 mt-2" />
+
+          <p className="text-gray-600 leading-relaxed whitespace-pre-line max-w-md mx-auto lg:mx-0">
             {description}
           </p>
 
-          {/* 🌷 Action Buttons */}
-          <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 pt-4">
-            {/* WhatsApp Button */}
-            <a
-              href={`https://wa.me/917016171941?text=${encodeURIComponent(
-                `Hi Lovique Studio! \n\nI'm interested in your *${name}* bouquet.\n\nHere’s the Instagram link: ${
-                  instagramLink || "https://instagram.com/lovique.studio"
-                }\n\nCould you please share more details?`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 rounded-full bg-green-500 text-white px-4 py-2 font-medium tracking-wide hover:bg-green-600 transition shadow-md hover:shadow-lg btn-whatsapp"
-            >
-              <MessageCircle className="w-5 h-5" />
-              Enquire on WhatsApp
-            </a>
-
-            {/* Instagram Button */}
-            {instagramLink && (
+          {/* Action Buttons Container */}
+          <div className="flex flex-col sm:flex-row justify-center gap-4 md:mx-0 mx-8 lg:justify-start">
+              {/* WhatsApp */}
               <a
-                href={instagramLink}
+                href={`https://wa.me/917016171941?text=${encodeURIComponent(
+                  `Hi Lovique Studio! 🌸\n\nI'm interested in your *${name}* bouquet.\n\nHere’s the Instagram link: ${
+                    instagramLink || "https://instagram.com/lovique.studio"
+                  }\n\nCould you please share more details?`
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-full border border-pink-400 text-pink-500 px-4 py-1.5 font-medium tracking-wide hover:bg-pink-50 transition shadow-md hover:shadow-lg"
+                className="flex items-center justify-center gap-2 rounded-full bg-green-500 text-white px-5 py-2 font-medium tracking-wide hover:bg-green-400 transition shadow-md hover:shadow-lg btn-whatsapp"
               >
-                <Instagram className="w-5 h-5" />
-                View on Instagram
+                <MessageCircle className="w-5 h-5" />
+                Enquire on WhatsApp
               </a>
-            )}
+
+              {/* Instagram */}
+              {instagramLink && (
+                <a
+                  href={instagramLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-full border border-pink-400 text-pink-500 px-5 py-1.5 font-medium tracking-wide hover:bg-pink-50 transition shadow-md hover:shadow-lg"
+                >
+                  <Instagram className="w-5 h-5" />
+                  View on Instagram
+                </a>
+              )}
+            </div>
           </div>
         </div>
-      </div>
     </section>
   );
 }
