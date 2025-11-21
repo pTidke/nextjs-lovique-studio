@@ -18,23 +18,12 @@ export default function Herosection() {
           >
             Lovique <span className="text-[var(--baby-pink-500)]">Studio</span>
           </h1>
-
           <p className="text-lg sm:text-xl italic text-gray-600 max-w-md mx-auto md:mx-0">
             Wrapped in grace, sealed with love — where flowers meet forever.
           </p>
-
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a
-            href="#bouquets"
-            onClick={(e) => {
-              e.preventDefault();
-              const el = document.querySelector("#bouquets");
-              if (el) {
-                window.scrollTo({
-                  top: el.getBoundingClientRect().top + window.scrollY - 100,
-                  behavior: "smooth",
-                });
-              }
-            }}
+            href="/#bouquets"
             className="inline-block mt-4 rounded-full bg-[var(--baby-pink-500)] text-black px-10 py-3 text-sm font-medium tracking-wide hover:bg-[var(--baby-pink-600)] transition-colors shadow-sm"
           >
             Explore Our Bouquets

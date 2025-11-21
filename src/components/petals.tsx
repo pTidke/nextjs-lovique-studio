@@ -23,7 +23,7 @@ export default function Petals({ count = 60 }: { count?: number }) {
       "from-gray-700 to-gray-500", // blackish (muted)
     ];
 
-    const generated = Array.from({ length: count }, (_, i) => {
+    const generated: Petal[] = Array.from({ length: count }, (_, i) => {
       const r = Math.random();
       const topBias = Math.pow(r, 2.5) * 120 - 20;
       return {
@@ -36,7 +36,9 @@ export default function Petals({ count = 60 }: { count?: number }) {
         color: colors[Math.floor(Math.random() * colors.length)],
       };
     });
-    setPetals(generated);
+
+    // Schedule state update after render to avoid cascading render warning
+    Promise.resolve().then(() => setPetals(generated));
   }, [count]);
 
   return (
@@ -64,10 +66,10 @@ export default function Petals({ count = 60 }: { count?: number }) {
         @keyframes float {
           0% {
             transform: translateY(0) rotate(0deg);
-            opacity: 0.6; /* visible right away */
+            opacity: 0.6;
           }
           10% {
-            opacity: 1; /* brighter at top */
+            opacity: 1;
           }
           50% {
             transform: translateY(50vh) rotate(90deg);

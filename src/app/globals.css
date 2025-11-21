@@ -76,7 +76,8 @@ a {
 }
 
 a:hover {
-  color: var(--baby-pink-600);
+  /* color: var(--baby-pink-600); */
+  color: black;
 }
 
 /* 🪞 Frosted glass helper class */

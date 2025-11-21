@@ -1,8 +1,10 @@
 import imageUrlBuilder from "@sanity/image-url";
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "./client";
 
 const builder = imageUrlBuilder(client);
 
-export function urlFor(source: any) {
-  return builder.image(source).auto("format").fit("max");
+export function urlFor(source: SanityImageSource): string {
+  // Ensures we always return a string URL
+  return builder.image(source).auto("format").fit("max").url();
 }

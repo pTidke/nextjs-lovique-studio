@@ -4,12 +4,18 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { useCallback, useState, useEffect } from "react";
+import { urlFor } from "@/sanity/image";
+
+type ImageType = {
+  asset?: { _ref?: string; url?: string };
+  url?: string;
+};
 
 export default function Carousel({
   images,
   name,
 }: {
-  images: any[];
+  images: ImageType[];
   name: string;
 }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -53,28 +59,38 @@ export default function Carousel({
         style={{ maxHeight: "80vh" }}
       >
         <div className="flex relative">
-          {images?.map((img: any, idx: number) => (
-            <div
-              key={idx}
-              className={`flex-[0_0_100%] relative aspect-[5/7] transition-opacity duration-1000 ${
-                idx === selectedIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-              }`}
-            >
-              <Image
-                src={img.asset.url}
-                alt={`${name} - image ${idx + 1}`}
-                fill
-                className="object-cover object-center rounded-2xl"
-                priority={idx === 0}
-              />
-            </div>
-          ))}
+          {images?.map((img, idx) => {
+            const imageUrl =
+              img?.asset?.url
+                ? img.asset.url
+                : img?.asset?._ref
+                ? urlFor(img.asset)
+                : img?.url || "/placeholder.jpg";
+
+            return (
+              <div
+                key={idx}
+                className={`flex-[0_0_100%] relative aspect-[5/7] transition-opacity duration-1000 ${
+                  idx === selectedIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+                }`}
+              >
+                <Image
+                  src={imageUrl}
+                  alt={`${name} - image ${idx + 1}`}
+                  fill
+                  className="object-cover object-center rounded-2xl"
+                  priority={idx === 0}
+                />
+              </div>
+            );
+          })}
         </div>
 
         {/* Navigation Arrows */}
         <button
           onClick={scrollPrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md border border-pink-100 text-pink-600 rounded-full w-14 h-14 flex items-center justify-center text-3xl font-bold hover:bg-pink-50 hover:scale-105 transition-all shadow-md" aria-label="Previous image"
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md border border-pink-100 text-pink-600 rounded-full w-14 h-14 flex items-center justify-center text-3xl font-bold hover:bg-pink-50 hover:scale-105 transition-all shadow-md"
+          aria-label="Previous image"
         >
           ‹
         </button>
@@ -107,25 +123,34 @@ export default function Carousel({
       {/* Thumbnails */}
       <div className="w-full mt-4 overflow-hidden" ref={thumbsRef}>
         <div className="flex gap-2 justify-center">
-          {images?.map((img: any, idx: number) => (
-            <button
-              key={idx}
-              onClick={() => scrollTo(idx)}
-              className={`relative w-16 h-16 md:w-20 md:h-20 rounded-lg my-4 mx-1 overflow-hidden border-2 transition-all duration-200
-                ${
-                  idx === selectedIndex
-                    ? "border-pink-500 scale-105 shadow-sm"
-                    : "border-transparent opacity-60 hover:opacity-100"
-                }`}
-            >
-              <Image
-                src={img.asset.url}
-                alt={`Thumbnail ${idx + 1}`}
-                fill
-                className="object-cover"
-              />
-            </button>
-          ))}
+          {images?.map((img, idx) => {
+            const thumbUrl =
+              img?.asset?.url
+                ? img.asset.url
+                : img?.asset?._ref
+                ? urlFor(img.asset)
+                : img?.url || "/placeholder.jpg";
+
+            return (
+              <button
+                key={idx}
+                onClick={() => scrollTo(idx)}
+                className={`relative w-16 h-16 md:w-20 md:h-20 rounded-lg my-4 mx-1 overflow-hidden border-2 transition-all duration-200
+                  ${
+                    idx === selectedIndex
+                      ? "border-pink-500 scale-105 shadow-sm"
+                      : "border-transparent opacity-60 hover:opacity-100"
+                  }`}
+              >
+                <Image
+                  src={thumbUrl}
+                  alt={`Thumbnail ${idx + 1}`}
+                  fill
+                  className="object-cover"
+                />
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

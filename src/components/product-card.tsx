@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Playfair_Display, Poppins } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  variable: "--font-sans",
-});
+// const poppins = Poppins({
+//   subsets: ["latin"],
+//   weight: ["300", "400", "500"],
+//   variable: "--font-sans",
+// });
 
 const playfair = Playfair_Display({
   subsets: ["latin"],

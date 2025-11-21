@@ -1,6 +1,4 @@
 import { client } from "@/sanity/client";
-import Image from "next/image";
-import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
 import Carousel from "@/components/carousel";
 import { MessageCircle, Instagram } from "lucide-react"; // 👈 add this at top
@@ -51,26 +49,16 @@ export default async function ProductPage({
     );
   }
 
-  const { name, description, theme, images, whatsappLink, instagramLink } =
+  const { name, description, theme, images, instagramLink } =
     product;
 
-  // ✅ Fallbacks if Sanity fields are missing/empty
-  const WA_DEFAULT_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || ""; // e.g. "15551234567"
-  const IG_DEFAULT_HANDLE = process.env.NEXT_PUBLIC_INSTAGRAM_HANDLE || ""; // e.g. "lovique.studio"
+  // // ✅ Fallbacks if Sanity fields are missing/empty
+  // const WA_DEFAULT_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || ""; // e.g. "15551234567"
+  // const IG_DEFAULT_HANDLE = process.env.NEXT_PUBLIC_INSTAGRAM_HANDLE || ""; // e.g. "lovique.studio"
 
-  const encodedMsg = encodeURIComponent(
-    `Hi! I'm interested in "${name}". Could you share details & pricing?`
-  );
-
-  const waHref =
-    (whatsappLink && whatsappLink.trim()) ||
-    (WA_DEFAULT_NUMBER
-      ? `https://wa.me/${WA_DEFAULT_NUMBER}?text=${encodedMsg}`
-      : "");
-
-  const igHref =
-    (instagramLink && instagramLink.trim()) ||
-    (IG_DEFAULT_HANDLE ? `https://instagram.com/${IG_DEFAULT_HANDLE}` : "");
+  // const encodedMsg = encodeURIComponent(
+  //   `Hi! I'm interested in "${name}". Could you share details & pricing?`
+  // );
 
   // Render
   return (
@@ -115,7 +103,7 @@ export default async function ProductPage({
               {/* WhatsApp */}
               <a
                 href={`https://wa.me/917016171941?text=${encodeURIComponent(
-                  `Hi Lovique Studio! 🌸\n\nI'm interested in your *${name}* bouquet.\n\nHere’s the Instagram link: ${
+                  `Hi Lovique Studio! \n\nI'm interested in your *${name}* bouquet.\n\nHere’s the Instagram link: ${
                     instagramLink || "https://instagram.com/lovique.studio"
                   }\n\nCould you please share more details?`
                 )}`}
