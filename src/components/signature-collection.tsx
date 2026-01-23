@@ -27,6 +27,7 @@ type Product = {
   price?: number;
   description?: string;
   instagramLink?: string;
+  category?: string;
   isNew?: boolean;
 };
 
@@ -40,6 +41,15 @@ export default function SignatureCollection({
   const router = useRouter();
   // Show only products tagged as "New Arrival", limit to 3
   const displayedProducts = products.filter((p) => p.isNew).slice(0, 3);
+
+  const categoryDisplayMap: Record<string, string> = {
+    flower_bags: "Flower bag",
+    bouquets: "Bouquet",
+    flower_pots: "Flower pot",
+    magazine: "Magazine",
+    wall_art: "Wall Art",
+    accessories: "Accessories",
+  };
 
   return (
     <section className="w-full py-24 bg-white">
@@ -123,6 +133,15 @@ export default function SignatureCollection({
                   <div className="absolute top-6 left-6 z-20">
                     <div className="relative bg-[#ee2b8c] text-white text-[9px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm backdrop-blur-sm border border-white/20">
                       New
+                    </div>
+                  </div>
+                )}
+
+                {/* Category Pill - Bottom Right */}
+                {product.category && (
+                  <div className="absolute bottom-6 right-6 z-20">
+                    <div className="bg-white/40 backdrop-blur-md text-[#2a1b1b] text-[8px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-white/30 shadow-sm">
+                      {categoryDisplayMap[product.category] || product.category}
                     </div>
                   </div>
                 )}

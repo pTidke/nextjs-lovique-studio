@@ -51,6 +51,7 @@ export function ProductCard({
     flower_pots: "Flower pot",
     magazine: "Magazine",
     wall_art: "Wall Art",
+    accessories: "Accessories",
   };
 
   return (

@@ -185,6 +185,7 @@ function NavLinks({
     { title: "Flower pots", value: "flower_pots" },
     { title: "Magazine", value: "magazine" },
     { title: "Wall Art", value: "wall_art" },
+    { title: "Accessories", value: "accessories" },
   ];
 
   // Base styles for links

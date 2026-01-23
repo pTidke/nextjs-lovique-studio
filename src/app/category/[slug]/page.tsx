@@ -25,6 +25,7 @@ const categoryMap: Record<string, string> = {
   flower_pots: "Flower Pots",
   magazine: "Magazine",
   wall_art: "Wall Art",
+  accessories: "Accessories",
 };
 
 export default async function CategoryPage({
