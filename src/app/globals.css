@@ -23,8 +23,14 @@
 
 /* Hero/product fade-up animation */
 @keyframes fade-up {
-  0% { transform: translateY(30px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .animate-fade-up {
@@ -32,24 +38,24 @@
 }
 
 .divider {
-  background: linear-gradient(90deg, transparent, var(--baby-pink-200), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--baby-pink-200),
+    transparent
+  );
   height: 1px;
   opacity: 0.5;
 }
 
-
 /* ✨ Global Base */
 html,
 body {
-  height: 100%;
   scroll-behavior: smooth;
   /* background-color: var(--baby-pink-50); */
   color: #333;
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
-  overflow-y: scroll; /* keeps scroll working but hides bar */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE & Edge */
 }
 
 /* 🩷 Typography tweaks */
@@ -108,23 +114,14 @@ a:hover {
   color: #0e5227; /* green-700 text */
 }
 
-/* 🌼 Scrollbar Styling */
+/* 🌼 Scrollbar Styling - Hidden */
+html {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--baby-pink-300);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--baby-pink-500);
-}
-
-::-webkit-scrollbar-track {
-  background: #fff;
+  display: none;
 }
 
 /* 🌬️ Section spacing */
@@ -170,7 +167,9 @@ section {
 
 /* 🌺 Card hover lift */
 .card-hover {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .card-hover:hover {

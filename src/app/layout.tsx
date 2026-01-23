@@ -5,6 +5,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import GlobalPetals from "@/components/global-petals"; // client-only petals wrapper
 import ScrollReset from "@/components/scroll-reset";
+import NavigationTracker from "@/components/navigation-tracker";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -41,8 +42,9 @@ export default function RootLayout({
 
         {/* Header */}
         <Header />
+        <NavigationTracker />
         <ScrollReset />
-        <main className="flex-1 pt-16 relative z-10">{children}</main>
+        <main className="flex-1 relative z-10">{children}</main>
 
         {/* Footer */}
         <Footer />

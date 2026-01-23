@@ -25,7 +25,7 @@ export default function Carousel({
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "center", duration: 20 },
-    [autoplay]
+    [autoplay],
   );
 
   const [thumbsRef, thumbsApi] = useEmblaCarousel({
@@ -51,26 +51,25 @@ export default function Carousel({
   const scrollTo = (index: number) => emblaApi?.scrollTo(index);
 
   return (
-    <div className="flex flex-col items-center w-full max-w-[600px]">
+    <div className="flex flex-col items-center w-full max-w-[480px]">
       {/* Main Carousel */}
       <div
         className="relative w-full overflow-hidden rounded-2xl bg-white/95 backdrop-blur-md border border-pink-100 shadow-sm"
         ref={emblaRef}
-        style={{ maxHeight: "80vh" }}
+        style={{ maxHeight: "75vh" }}
       >
         <div className="flex relative">
           {images?.map((img, idx) => {
-            const imageUrl =
-              img?.asset?.url
-                ? img.asset.url
-                : img?.asset?._ref
+            const imageUrl = img?.asset?.url
+              ? img.asset.url
+              : img?.asset?._ref
                 ? urlFor(img.asset)
                 : img?.url || "/placeholder.jpg";
 
             return (
               <div
                 key={idx}
-                className={`flex-[0_0_100%] relative aspect-[5/7] transition-opacity duration-1000 ${
+                className={`flex-[0_0_100%] relative aspect-[6/8] transition-opacity duration-1000 ${
                   idx === selectedIndex ? "opacity-100 z-10" : "opacity-0 z-0"
                 }`}
               >
@@ -124,10 +123,9 @@ export default function Carousel({
       <div className="w-full mt-4 overflow-hidden" ref={thumbsRef}>
         <div className="flex gap-2 justify-center">
           {images?.map((img, idx) => {
-            const thumbUrl =
-              img?.asset?.url
-                ? img.asset.url
-                : img?.asset?._ref
+            const thumbUrl = img?.asset?.url
+              ? img.asset.url
+              : img?.asset?._ref
                 ? urlFor(img.asset)
                 : img?.url || "/placeholder.jpg";
 

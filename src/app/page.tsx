@@ -1,27 +1,27 @@
 import { client } from "@/sanity/client";
 import { PRODUCTS_GRID } from "@/sanity/queries";
-import { ProductCard } from "@/components/product-card";
 import HeroSection from "@/components/hero-section";
+import FeaturesSection from "@/components/features-section";
+import SignatureCollection from "@/components/signature-collection";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
   const products = await client.fetch(PRODUCTS_GRID);
-  type Product = {
-    _id: string;
-    name: string;
-    theme?: string;
-    slug: { current: string };
-    cover?: { url?: string };
-  };
 
   return (
-    <main className="relative">
+    <main className="relative animate-fade-up">
       {/* HERO (client component) */}
       <HeroSection />
 
+      {/* FEATURES */}
+      <FeaturesSection />
+
+      {/* SIGNATURE COLLECTION */}
+      <SignatureCollection products={products} />
+
       {/* PRODUCT GRID */}
-      <section
+      {/* <section
         id="bouquets"
         className="mx-auto max-w-7xl px-6 pb-32 scroll-mt-28 md:scroll-mt-28"
       >
@@ -33,10 +33,13 @@ export default async function HomePage() {
               name={p.name}
               theme={p.theme}
               coverUrl={p.cover?.url}
+              description={p.description}
+              instagramLink={p.instagramLink}
+              isNew={p.isNew}
             />
           ))}
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }
