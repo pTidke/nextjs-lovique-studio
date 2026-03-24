@@ -1,6 +1,13 @@
 import { client } from "@/sanity/client";
 import Image from "next/image";
 import { Playfair_Display, Poppins } from "next/font/google";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Testimonials — Lovique Studio",
+  description:
+    "Read what our happy customers say about their Lovique Studio forever flower arrangements.",
+};
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -58,9 +65,7 @@ export default async function TestimonialsPage() {
           <p
             className={`${playfair.className} text-xl md:text-2xl lg:text-3xl text-gray-500 italic max-w-3xl leading-relaxed`}
           >
-            {
-              '"Wrapped in grace, sealed with love — words from our happy customers."'
-            }
+            {'"Where Flower meets Forever — words from our happy customers."'}
           </p>
         </div>
       </section>
@@ -99,11 +104,23 @@ export default async function TestimonialsPage() {
 
                 {/* Testimony Content */}
                 <div className="space-y-6 max-w-xl">
-                  <p
-                    className={`${poppins.className} text-sm md:text-base text-gray-500 leading-relaxed font-light italic`}
-                  >
-                    {t.message}
-                  </p>
+                  <div className="relative">
+                    <span
+                      className={`${playfair.className} absolute -top-6 -left-2 text-5xl text-[#ee2b8c]/15 leading-none select-none`}
+                    >
+                      &ldquo;
+                    </span>
+                    <p
+                      className={`${poppins.className} text-sm md:text-base text-gray-500 leading-relaxed font-light italic`}
+                    >
+                      {t.message}
+                    </p>
+                    <span
+                      className={`${playfair.className} absolute -bottom-8 -right-2 text-5xl text-[#ee2b8c]/15 leading-none select-none`}
+                    >
+                      &rdquo;
+                    </span>
+                  </div>
 
                   <div className="space-y-1">
                     <h3

@@ -1,4 +1,12 @@
+import Image from "next/image";
 import { Playfair_Display, Poppins } from "next/font/google";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Our Story — Lovique Studio",
+  description:
+    "Discover how Lovique Studio was born from a passion for preserving love through handcrafted forever flowers.",
+};
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -42,6 +50,20 @@ export default function StoryPage() {
         </div>
       </section>
 
+      {/* Illustration Section */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-md mx-auto">
+          <div className="relative w-full aspect-square">
+            <Image
+              src="/florist-animate.svg"
+              alt="Lovique Studio Illustration"
+              fill
+              className="object-contain"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Content Sections */}
       <section className="max-w-3xl mx-auto px-6 py-32 space-y-24">
         {/* Philosophy */}
@@ -56,17 +78,17 @@ export default function StoryPage() {
               className={`${poppins.className} text-sm md:text-base text-gray-400 leading-relaxed font-light`}
             >
               {
-                "Lovique Studio was born from a simple belief: that nature's beauty doesn't need competition. We believe in luxury through restraint, focusing on monochromatic palettes, subtle textures, and the unique architecture of every stem."
-              }
-            </p>
-            <p
-              className={`${poppins.className} text-sm md:text-base text-gray-400 leading-relaxed font-light`}
-            >
-              {
-                "Each arrangement is handcrafted in our city-center studio, with a dedication to sustainable sourcing and the timeless elegance of premium florals. We don't just create bouquets; we craft moments of serenity."
+                "Lovique Studio was born on 7th September, founded by a passionate young artist with a simple yet powerful idea—to let love last forever. What began as a creative dream soon transformed into a space where emotions are preserved through forever flowers. Each piece is thoughtfully handcrafted, not just as a bouquet, but as a symbol of timeless love, memories, and moments that deserve to never fade. At Lovique Studio, we don’t just create flowers—we help people feel love, forever."
               }
             </p>
           </div>
+        </div>
+
+        {/* Decorative Divider */}
+        <div className="flex items-center justify-center gap-4">
+          <div className="w-16 h-px bg-[#ee2b8c]/20" />
+          <div className="w-1.5 h-1.5 rounded-full bg-[#ee2b8c]/30" />
+          <div className="w-16 h-px bg-[#ee2b8c]/20" />
         </div>
 
         {/* The Studio */}
@@ -74,15 +96,28 @@ export default function StoryPage() {
           <h2
             className={`${playfair.className} text-3xl md:text-4xl text-[#2a1b1b]`}
           >
-            The Studio Experience
+            Creativity behind our Flowers
           </h2>
-          <p
-            className={`${poppins.className} text-sm md:text-base text-gray-400 leading-relaxed font-light`}
+          <ul
+            className={`${poppins.className} text-sm md:text-base text-gray-400 leading-relaxed font-light space-y-3 list-none`}
           >
-            {
-              "Our studio is a sanctuary of creativity and calm. We invite you to explore our signature collections, participate in our seasonal workshops, and discover the intentionality behind every petal we place."
-            }
-          </p>
+            <li className="flex items-start gap-3">
+              <span className="text-[#ee2b8c] mt-1.5 text-[6px]">●</span>
+              <span>Rooted in passion, imagination, and emotional expression</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-[#ee2b8c] mt-1.5 text-[6px]">●</span>
+              <span>Crafted with a strong sense of luxury, elegance, and premium detailing</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-[#ee2b8c] mt-1.5 text-[6px]">●</span>
+              <span>Designed using rich textures, refined color palettes, and graceful compositions</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-[#ee2b8c] mt-1.5 text-[6px]">●</span>
+              <span>Created with timeless forever flowers that retain their beauty and richness forever</span>
+            </li>
+          </ul>
         </div>
       </section>
     </main>

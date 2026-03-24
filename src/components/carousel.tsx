@@ -5,6 +5,8 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { useCallback, useState, useEffect } from "react";
 import { urlFor } from "@/sanity/image";
+import { X, ZoomIn } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type ImageType = {
   asset?: { _ref?: string; url?: string };
@@ -19,6 +21,14 @@ export default function Carousel({
   name: string;
 }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const getImageUrl = (img: ImageType) =>
+    img?.asset?.url
+      ? img.asset.url
+      : img?.asset?._ref
+        ? urlFor(img.asset)
+        : img?.url || "/placeholder.jpg";
 
   // Auto-slide every 4 seconds
   const autoplay = Autoplay({ delay: 4000, stopOnInteraction: false });
@@ -51,7 +61,7 @@ export default function Carousel({
   const scrollTo = (index: number) => emblaApi?.scrollTo(index);
 
   return (
-    <div className="flex flex-col items-center w-full max-w-[480px]">
+    <div className="flex flex-col items-center w-full max-w-[480px] lg:max-w-[560px]">
       {/* Main Carousel */}
       <div
         className="relative w-full overflow-hidden rounded-2xl bg-white/95 backdrop-blur-md border border-pink-100 shadow-sm"
@@ -60,16 +70,13 @@ export default function Carousel({
       >
         <div className="flex relative">
           {images?.map((img, idx) => {
-            const imageUrl = img?.asset?.url
-              ? img.asset.url
-              : img?.asset?._ref
-                ? urlFor(img.asset)
-                : img?.url || "/placeholder.jpg";
+            const imageUrl = getImageUrl(img);
 
             return (
               <div
                 key={idx}
-                className={`flex-[0_0_100%] relative aspect-[6/8] transition-opacity duration-1000 ${
+                onClick={() => setLightboxOpen(true)}
+                className={`flex-[0_0_100%] relative aspect-[6/8] transition-opacity duration-1000 cursor-zoom-in ${
                   idx === selectedIndex ? "opacity-100 z-10" : "opacity-0 z-0"
                 }`}
               >
@@ -85,10 +92,15 @@ export default function Carousel({
           })}
         </div>
 
+        {/* Zoom hint */}
+        <div className="absolute top-3 right-3 z-20 bg-white/70 backdrop-blur-sm rounded-full p-2 pointer-events-none opacity-60">
+          <ZoomIn className="w-4 h-4 text-gray-500" />
+        </div>
+
         {/* Navigation Arrows */}
         <button
           onClick={scrollPrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md border border-pink-100 text-pink-600 rounded-full w-14 h-14 flex items-center justify-center text-3xl font-bold hover:bg-pink-50 hover:scale-105 transition-all shadow-md"
+          className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 backdrop-blur-md border border-pink-100/50 text-[#ee2b8c] rounded-full w-9 h-9 flex items-center justify-center text-lg hover:bg-white hover:scale-110 transition-all shadow-sm"
           aria-label="Previous image"
         >
           ‹
@@ -96,7 +108,7 @@ export default function Carousel({
 
         <button
           onClick={scrollNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md border border-pink-100 text-pink-600 rounded-full w-14 h-14 flex items-center justify-center text-3xl font-bold hover:bg-pink-50 hover:scale-105 transition-all shadow-md"
+          className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 backdrop-blur-md border border-pink-100/50 text-[#ee2b8c] rounded-full w-9 h-9 flex items-center justify-center text-lg hover:bg-white hover:scale-110 transition-all shadow-sm"
           aria-label="Next image"
         >
           ›
@@ -123,11 +135,7 @@ export default function Carousel({
       <div className="w-full mt-4 overflow-hidden" ref={thumbsRef}>
         <div className="flex gap-2 justify-center">
           {images?.map((img, idx) => {
-            const thumbUrl = img?.asset?.url
-              ? img.asset.url
-              : img?.asset?._ref
-                ? urlFor(img.asset)
-                : img?.url || "/placeholder.jpg";
+            const thumbUrl = getImageUrl(img);
 
             return (
               <button
@@ -151,6 +159,78 @@ export default function Carousel({
           })}
         </div>
       </div>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setLightboxOpen(false)}
+          >
+            <button
+              onClick={() => setLightboxOpen(false)}
+              className="absolute top-6 right-6 z-10 text-white/70 hover:text-white transition-colors"
+              aria-label="Close lightbox"
+            >
+              <X className="w-8 h-8" />
+            </button>
+
+            {/* Navigation */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const prev =
+                  selectedIndex === 0 ? images.length - 1 : selectedIndex - 1;
+                scrollTo(prev);
+              }}
+              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-4xl transition-colors z-10"
+              aria-label="Previous image"
+            >
+              ‹
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const next =
+                  selectedIndex === images.length - 1 ? 0 : selectedIndex + 1;
+                scrollTo(next);
+              }}
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-4xl transition-colors z-10"
+              aria-label="Next image"
+            >
+              ›
+            </button>
+
+            {/* Image */}
+            <motion.div
+              key={selectedIndex}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-3xl aspect-[3/4] max-h-[85vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image
+                src={getImageUrl(images[selectedIndex])}
+                alt={`${name} - image ${selectedIndex + 1}`}
+                fill
+                className="object-contain"
+                sizes="100vw"
+                priority
+              />
+            </motion.div>
+
+            {/* Counter */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-xs tracking-widest">
+              {selectedIndex + 1} / {images.length}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

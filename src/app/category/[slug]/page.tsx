@@ -3,6 +3,7 @@ import { PRODUCTS_BY_CATEGORY } from "@/sanity/queries";
 import { ProductCard } from "@/components/product-card";
 import { Playfair_Display, Poppins } from "next/font/google";
 import BrandBackground from "@/components/brand-background";
+import type { Metadata } from "next";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400"] });
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600"] });
@@ -19,14 +20,48 @@ type Product = {
   cover?: { url?: string };
 };
 
-const categoryMap: Record<string, string> = {
-  flower_bags: "Flower Bags",
-  bouquets: "Bouquets",
-  flower_pots: "Flower Pots",
-  magazine: "Magazine",
-  wall_art: "Wall Art",
-  accessories: "Accessories",
+const categoryMap: Record<string, { title: string; description: string }> = {
+  flower_bags: {
+    title: "Flower Bags",
+    description: "Elegant forever flower bags designed for gifting and everyday luxury.",
+  },
+  bouquets: {
+    title: "Bouquets",
+    description: "Handcrafted forever flower bouquets that capture timeless emotions.",
+  },
+  flower_pots: {
+    title: "Flower Pots",
+    description: "Beautiful potted forever flower arrangements to elevate any space.",
+  },
+  magazine: {
+    title: "Magazine",
+    description: "Unique magazine-style arrangements blending art with floral design.",
+  },
+  wall_art: {
+    title: "Wall Art",
+    description: "Stunning forever flower wall pieces that transform your walls into art.",
+  },
+  accessories: {
+    title: "Accessories",
+    description: "Delicate floral accessories handcrafted with love and attention to detail.",
+  },
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const category = categoryMap[slug];
+  const title = category?.title || "Collection";
+  return {
+    title: `${title} — Lovique Studio`,
+    description:
+      category?.description ||
+      "Explore our curated forever flower collection at Lovique Studio.",
+  };
+}
 
 export default async function CategoryPage({
   params,
@@ -35,7 +70,9 @@ export default async function CategoryPage({
 }) {
   const { slug } = await params;
   const products = await client.fetch(PRODUCTS_BY_CATEGORY, { category: slug });
-  const categoryTitle = categoryMap[slug] || "Collection";
+  const category = categoryMap[slug];
+  const categoryTitle = category?.title || "Collection";
+  const categoryDescription = category?.description || "Explore our curated selection, each designed with a touch of luxury and minimalism.";
 
   return (
     <main className="relative min-h-screen bg-white pb-24 overflow-hidden">
@@ -57,8 +94,7 @@ export default async function CategoryPage({
           <p
             className={`${poppins.className} text-sm md:text-base text-gray-500 max-w-xl mx-auto leading-relaxed opacity-80`}
           >
-            Explore our curated selection of {categoryTitle.toLowerCase()}, each
-            designed with a touch of luxury and minimalism.
+            {categoryDescription}
           </p>
         </div>
       </section>

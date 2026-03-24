@@ -1,9 +1,10 @@
 "use client";
 
 import { Playfair_Display, Poppins } from "next/font/google";
+import Image from "next/image";
 import Carousel from "@/components/carousel";
-import { MessageCircle, Instagram, ChevronLeft } from "lucide-react";
-import { useState, useEffect } from "react";
+import { MessageCircle, Instagram, ChevronLeft, Share2, Check } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import BrandBackground from "@/components/brand-background";
@@ -27,6 +28,17 @@ type ProductImage = {
   _key: string;
 };
 
+type RelatedProduct = {
+  _id: string;
+  name: string;
+  theme?: string;
+  slug: { current: string };
+  cover?: { url?: string };
+  category?: string;
+  isNew?: boolean;
+  instagramLink?: string;
+};
+
 type Product = {
   name: string;
   description: string;
@@ -34,9 +46,16 @@ type Product = {
   images: ProductImage[];
   whatsappLink?: string;
   instagramLink?: string;
+  category?: string;
 };
 
-export default function ProductView({ product }: { product: Product }) {
+export default function ProductView({
+  product,
+  relatedProducts = [],
+}: {
+  product: Product;
+  relatedProducts?: RelatedProduct[];
+}) {
   const [backInfo, setBackInfo] = useState({
     href: "/",
     label: "Back to Collection",
@@ -66,6 +85,26 @@ export default function ProductView({ product }: { product: Product }) {
       }
     }
   }, []);
+
+  const [shared, setShared] = useState(false);
+
+  const handleShare = useCallback(async () => {
+    const url = window.location.href;
+    const text = `Check out ${product.name} from Lovique Studio!`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: product.name, text, url });
+        return;
+      } catch {
+        // User cancelled or share failed, fall through to clipboard
+      }
+    }
+
+    await navigator.clipboard.writeText(url);
+    setShared(true);
+    setTimeout(() => setShared(false), 2000);
+  }, [product.name]);
 
   const { name, description, theme, images, instagramLink } = product;
 
@@ -195,6 +234,23 @@ export default function ProductView({ product }: { product: Product }) {
                   <span>View on Instagram</span>
                 </a>
               )}
+
+              <button
+                onClick={handleShare}
+                className="flex items-center justify-center gap-3 bg-transparent border border-[#2a1b1b]/10 text-[#2a1b1b] px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white hover:border-[#2a1b1b] transition-all"
+              >
+                {shared ? (
+                  <>
+                    <Check className="w-5 h-5 text-emerald-500" />
+                    <span>Link Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-5 h-5" />
+                    <span>Share</span>
+                  </>
+                )}
+              </button>
             </div>
 
             {/* Features (Mini Version) */}
@@ -206,7 +262,7 @@ export default function ProductView({ product }: { product: Product }) {
                   Curation
                 </p>
                 <p className="text-xs text-gray-400 font-light">
-                  Hand-selected seasonal blooms
+                  Handcrafted forever flowers
                 </p>
               </div>
               <div className="space-y-2">
@@ -216,13 +272,63 @@ export default function ProductView({ product }: { product: Product }) {
                   Packaging
                 </p>
                 <p className="text-xs text-gray-400 font-light">
-                  Signature artisan silk wrap
+                  Premium tailored packaging
                 </p>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <section className="relative z-10 max-w-7xl mx-auto px-6 pt-24">
+          <div className="border-t border-[#2a1b1b]/5 pt-16">
+            <h2
+              className={`${playfair.className} italic text-3xl md:text-4xl text-[#2a1b1b] text-center mb-12`}
+            >
+              You May Also Love
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {relatedProducts.map((item) => (
+                <Link
+                  key={item._id}
+                  href={`/product/${item.slug.current}`}
+                  className="group block overflow-hidden rounded-[1.5rem] bg-[#fffafa] bg-gradient-to-b from-white via-[#fff5f8] to-[#fffafa] shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] transition-all duration-500"
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-t-[1.5rem] bg-[#fffafa]">
+                    {item.cover?.url ? (
+                      <Image
+                        src={item.cover.url}
+                        alt={item.name}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-300">
+                        No Image
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4 space-y-1">
+                    <h3
+                      className={`${playfair.className} text-xl md:text-2xl font-bold text-[#2a1b1b] leading-tight`}
+                    >
+                      {item.name}
+                    </h3>
+                    <p
+                      className={`${poppins.className} text-sm text-gray-500 leading-relaxed`}
+                    >
+                      {item.theme || "Lovique Studio Special"}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }

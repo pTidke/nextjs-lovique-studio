@@ -12,9 +12,9 @@ const poppins = Poppins({
 const features = [
   {
     icon: Flower2,
-    title: "Freshly Curated",
+    title: "Forever Flowers",
     description:
-      "Seasonal blooms selected for their unique form and delicate fragrance.",
+      "Handcrafted preserved blooms chosen for their timeless beauty and lasting elegance.",
   },
   {
     icon: PartyPopper,
@@ -26,7 +26,7 @@ const features = [
     icon: Gift,
     title: "Artisan Packaging",
     description:
-      "Wrapped in eco-friendly silk paper and our signature baby pink ribbon.",
+      "Thoughtfully wrapped with premium packaging tailored to each unique piece.",
   },
 ];
 

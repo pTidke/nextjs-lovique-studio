@@ -60,12 +60,12 @@ export default function SignatureCollection({
             <span
               className={`${poppins.className} text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
             >
-              Seasonal Highlights
+              New Arrivals
             </span>
             <h2
               className={`${playfair.className} italic text-4xl md:text-5xl lg:text-6xl text-[#2a1b1b]`}
             >
-              Our New Collection
+              Our Collection
             </h2>
           </div>
           <Link
@@ -123,7 +123,7 @@ export default function SignatureCollection({
                       "noopener,noreferrer",
                     );
                   }}
-                  className="absolute top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform z-10 text-gray-400 hover:text-[#ee2b8c]"
+                  className="absolute top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-all duration-300 z-10 text-gray-400 hover:text-[#ee2b8c] md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0"
                 >
                   <Instagram className="w-5 h-5" />
                 </button>

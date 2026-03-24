@@ -3,6 +3,13 @@ import { PRODUCTS_GRID } from "@/sanity/queries";
 import { ProductCard } from "@/components/product-card";
 import { Playfair_Display, Poppins } from "next/font/google";
 import BrandBackground from "@/components/brand-background";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Catalogue — Lovique Studio",
+  description:
+    "Browse the full collection of handcrafted forever flower arrangements from Lovique Studio.",
+};
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -51,8 +58,8 @@ export default async function CataloguePage() {
           <p
             className={`${poppins.className} text-sm md:text-base text-gray-500 max-w-2xl mx-auto leading-relaxed opacity-80`}
           >
-            Browse our entire collection of handcrafted floral arrangements,
-            each designed to bring a touch of luxury and nature into your home.
+            Browse our entire collection of handcrafted forever flower arrangements,
+            each designed to bring a touch of luxury and artistry into your space.
           </p>
         </div>
       </section>

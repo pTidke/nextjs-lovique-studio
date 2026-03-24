@@ -46,6 +46,19 @@ export const PRODUCTS_BY_CATEGORY = /* groq */ `
 }
 `;
 
+export const RELATED_PRODUCTS = /* groq */ `
+*[_type == "product" && category == $category && slug.current != $slug] | order(_createdAt desc)[0...3]{
+  _id,
+  name,
+  theme,
+  slug,
+  category,
+  isNew,
+  instagramLink,
+  "cover": images[0]{..., "url": asset->url}
+}
+`;
+
 export const TESTIMONIALS = /* groq */ `
 *[_type == "testimonial"] | order(date desc){
   _id,

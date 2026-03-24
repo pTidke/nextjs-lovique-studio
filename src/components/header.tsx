@@ -151,7 +151,7 @@ export default function Header() {
                   <Search className="w-5 h-5 mb-1" /> Search
                 </button> */}
                 <Link
-                  href="https://instagram.com/lovique.studio"
+                  href="https://instagram.com/lovique._studio"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-col items-center gap-1 text-[10px] uppercase tracking-widest hover:text-pink-600 transition"

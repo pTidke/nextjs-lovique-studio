@@ -32,9 +32,9 @@ export default function Footer() {
           01. Information Collection
         </h4>
         <p>
-          We collect information that you provide directly to us when you make a
-          purchase, subscribe to our newsletter, or contact our studio. This may
-          include your name, email address, phone number, and delivery details.
+          We collect information that you provide directly to us when you
+          enquire via WhatsApp or Instagram, or contact our studio. This may
+          include your name, phone number, delivery address, and order details.
         </p>
       </section>
       <section className="space-y-3">
@@ -52,9 +52,9 @@ export default function Footer() {
           03. Studio Security
         </h4>
         <p>
-          We implement a variety of security measures to maintain the safety of
-          your personal information. All transactions are processed through
-          secure gateways.
+          We take reasonable measures to protect your personal information.
+          Payments are accepted via UPI with advance payment required to
+          confirm your order. We never store your payment details.
         </p>
       </section>
     </>
@@ -67,9 +67,9 @@ export default function Footer() {
           01. Custom Commissions
         </h4>
         <p>
-          As each arrangement is a custom work of art handcrafted with seasonal
-          blooms, slight variations from catalog images are natural and
-          celebrated. No two bouquets are identical.
+          Each arrangement is a custom work of art, handcrafted with forever
+          flowers. While the final product will closely match the catalog
+          images, slight variations may occur as each piece is made by hand.
         </p>
       </section>
       <section className="space-y-3">
@@ -77,20 +77,35 @@ export default function Footer() {
           02. Orders & Delivery
         </h4>
         <p>
-          Orders must be placed at least 24-48 hours in advance for specific
-          curations. We are not responsible for delivery delays once the flowers
-          have left our studio if the recipient is unavailable.
+          Please place orders at least 4–5 days in advance to ensure timely
+          preparation and delivery. Orders placed with less than 1 day&apos;s notice
+          may be subject to additional rush charges. We are not responsible for
+          delivery delays once the flowers have left our studio, or if the
+          recipient is unavailable at the time of delivery.
         </p>
       </section>
       <section className="space-y-3">
         <h4 className="text-[#2a1b1b] font-medium uppercase tracking-widest text-xs">
           03. Care & Lifespan
         </h4>
-        <p>
-          Flowers are temporary treasures. While we select the freshest blooms,
-          their lifespan depends on the environment and care provided after
-          delivery. We cannot offer refunds for natural wilting processes.
-        </p>
+        <ul className="space-y-2 list-none">
+          <li className="flex items-start gap-2">
+            <span className="text-[#ee2b8c] mt-1 text-[5px]">●</span>
+            <span>Requires minimal care with no watering or sunlight needed</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#ee2b8c] mt-1 text-[5px]">●</span>
+            <span>Maintains its beauty, shape, and richness over time</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#ee2b8c] mt-1 text-[5px]">●</span>
+            <span>Protected from dust and moisture for long-lasting elegance</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#ee2b8c] mt-1 text-[5px]">●</span>
+            <span>Designed with forever flowers that offer an extended, timeless lifespan</span>
+          </li>
+        </ul>
       </section>
     </>
   );
@@ -134,8 +149,8 @@ export default function Footer() {
               >
                 Our studio specializes in monochromatic palettes and soft
                 textures. We believe that simplicity is the ultimate form of
-                elegance, letting the natural beauty of each bloom speak for
-                itself.
+                elegance, letting the beauty of each handcrafted piece speak
+                for itself.
               </p>
 
               <Link
@@ -160,9 +175,9 @@ export default function Footer() {
           <p
             className={`${poppins.className} text-xs md:text-sm text-gray-400 leading-relaxed`}
           >
-            A minimalist boutique for high-end floral artistry.{" "}
+            A minimalist studio for high end floristry{" "}
             <br className="hidden md:block" />
-            Based in the heart of the city.
+            Based on forever life stories.
           </p>
         </div>
       </section>
