@@ -21,9 +21,13 @@ type Product = {
 };
 
 const categoryMap: Record<string, { title: string; description: string }> = {
-  flower_bags: {
-    title: "Flower Bags",
-    description: "Elegant forever flower bags designed for gifting and everyday luxury.",
+  singles: {
+    title: "Singles",
+    description: "Elegant individual forever flowers, perfect for minimalist decor or a thoughtful small gesture.",
+  },
+  flower_basket: {
+    title: "Flower Basket",
+    description: "Charming baskets filled with a curated selection of forever flowers, designed for tabletop elegance.",
   },
   bouquets: {
     title: "Bouquets",
@@ -40,10 +44,6 @@ const categoryMap: Record<string, { title: string; description: string }> = {
   wall_art: {
     title: "Wall Art",
     description: "Stunning forever flower wall pieces that transform your walls into art.",
-  },
-  accessories: {
-    title: "Accessories",
-    description: "Delicate floral accessories handcrafted with love and attention to detail.",
   },
 };
 

@@ -43,12 +43,12 @@ export default function SignatureCollection({
   const displayedProducts = products.filter((p) => p.isNew).slice(0, 3);
 
   const categoryDisplayMap: Record<string, string> = {
-    flower_bags: "Flower bag",
+    singles: "Singles",
+    flower_basket: "Flower Basket",
     bouquets: "Bouquet",
     flower_pots: "Flower pot",
     magazine: "Magazine",
     wall_art: "Wall Art",
-    accessories: "Accessories",
   };
 
   return (

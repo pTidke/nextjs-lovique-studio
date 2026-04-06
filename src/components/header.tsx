@@ -180,12 +180,12 @@ function NavLinks({
 }) {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const categories = [
-    { title: "Flower bags", value: "flower_bags" },
+    { title: "Singles", value: "singles" },
+    { title: "Flower basket", value: "flower_basket" },
     { title: "Bouquets", value: "bouquets" },
     { title: "Flower pots", value: "flower_pots" },
     { title: "Magazine", value: "magazine" },
     { title: "Wall Art", value: "wall_art" },
-    { title: "Accessories", value: "accessories" },
   ];
 
   // Base styles for links
