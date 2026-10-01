@@ -3,12 +3,14 @@ import { TESTIMONIALS } from "@/sanity/queries";
 import { playfair, poppins } from "@/lib/fonts";
 import SanityImage from "@/components/sanity-image";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Testimonials — Lovique Studio",
   description:
     "Read what our happy customers say about their Lovique Studio forever flower arrangements.",
-};
+  path: "/testimonials",
+});
 
 export const revalidate = 60;
 

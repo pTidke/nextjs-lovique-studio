@@ -1,12 +1,14 @@
 import Image from "next/image";
 import { playfair, poppins } from "@/lib/fonts";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Our Story — Lovique Studio",
   description:
     "Discover how Lovique Studio was born from a passion for preserving love through handcrafted forever flowers.",
-};
+  path: "/story",
+});
 
 export default function StoryPage() {
   return (

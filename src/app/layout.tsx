@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { playfair, poppins } from "@/lib/fonts";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import GlobalPetals from "@/components/global-petals"; // client-only petals wrapper
@@ -8,10 +9,17 @@ import ScrollReset from "@/components/scroll-reset";
 import NavigationTracker from "@/components/navigation-tracker";
 import MotionProvider from "@/components/motion-provider";
 
+// Site-wide defaults; pages override via pageMetadata() (src/lib/site.ts)
 export const metadata: Metadata = {
-  title: "Lovique Studio",
-  description:
-    "Wrapped in grace, sealed with love — where flowers meet forever.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    siteName: SITE_NAME,
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

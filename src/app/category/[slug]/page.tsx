@@ -5,6 +5,8 @@ import { ProductCard } from "@/components/product-card";
 import BrandBackground from "@/components/brand-background";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/site";
+import { categoryMap } from "@/lib/categories";
 
 export const revalidate = 60;
 
@@ -20,33 +22,6 @@ type Product = {
   cover?: { url?: string; lqip?: string };
 };
 
-const categoryMap: Record<string, { title: string; description: string }> = {
-  singles: {
-    title: "Singles",
-    description: "Elegant individual forever flowers, perfect for minimalist decor or a thoughtful small gesture.",
-  },
-  flower_basket: {
-    title: "Flower Basket",
-    description: "Charming baskets filled with a curated selection of forever flowers, designed for tabletop elegance.",
-  },
-  bouquets: {
-    title: "Bouquets",
-    description: "Handcrafted forever flower bouquets that capture timeless emotions.",
-  },
-  flower_pots: {
-    title: "Flower Pots",
-    description: "Beautiful potted forever flower arrangements to elevate any space.",
-  },
-  magazine: {
-    title: "Magazine",
-    description: "Unique magazine-style arrangements blending art with floral design.",
-  },
-  wall_art: {
-    title: "Wall Art",
-    description: "Stunning forever flower wall pieces that transform your walls into art.",
-  },
-};
-
 export function generateStaticParams() {
   return Object.keys(categoryMap).map((slug) => ({ slug }));
 }
@@ -59,12 +34,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const category = categoryMap[slug];
   const title = category?.title || "Collection";
-  return {
+  return pageMetadata({
     title: `${title} — Lovique Studio`,
     description:
       category?.description ||
       "Explore our curated forever flower collection at Lovique Studio.",
-  };
+    path: `/category/${slug}`,
+  });
 }
 
 export default async function CategoryPage({

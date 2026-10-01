@@ -4,12 +4,14 @@ import { PRODUCTS_GRID } from "@/sanity/queries";
 import { ProductCard } from "@/components/product-card";
 import BrandBackground from "@/components/brand-background";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Catalogue — Lovique Studio",
   description:
     "Browse the full collection of handcrafted forever flower arrangements from Lovique Studio.",
-};
+  path: "/catalogue",
+});
 
 export const revalidate = 60;
 

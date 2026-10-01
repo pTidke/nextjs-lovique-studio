@@ -3,18 +3,20 @@
 import { ProductCard } from "@/components/product-card";
 import { playfair, poppins } from "@/lib/fonts";
 import Carousel from "@/components/carousel";
-import { Instagram, ChevronLeft, Share2, Check } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import {
+  Instagram,
+  ChevronLeft,
+  Share2,
+  Check,
+  MessageCircle,
+  Clock,
+} from "lucide-react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import BrandBackground from "@/components/brand-background";
-import { formatPrice } from "@/lib/utils";
-
-// Strips emoji only — keeps ₹, curly quotes, dashes and • bullets intact
-const EMOJI_REGEX = new RegExp(
-  "[\\p{Extended_Pictographic}\\u{1F1E6}-\\u{1F1FF}\\uFE0F\\u200D\\u20E3]",
-  "gu",
-);
+import { EMOJI_REGEX, formatPrice } from "@/lib/utils";
+import { INSTAGRAM_DM_URL } from "@/lib/site";
 
 type ProductImage = {
   asset: {
@@ -107,6 +109,42 @@ export default function ProductView({
   }, [product.name]);
 
   const { name, description, theme, images, instagramLink, price } = product;
+
+  // Enquire: Instagram DMs can't be prefilled, so copy a ready-made message
+  // (product + link) to the clipboard while the link opens the DM thread.
+  const [enquireCopied, setEnquireCopied] = useState(false);
+  const handleEnquire = useCallback(() => {
+    const message = `Hi Lovique Studio! I'd love to order "${name}"${
+      price ? ` (${formatPrice(price)})` : ""
+    }. ${window.location.href}`;
+    navigator.clipboard
+      ?.writeText(message)
+      .then(() => {
+        setEnquireCopied(true);
+        setTimeout(() => setEnquireCopied(false), 5000);
+      })
+      .catch(() => {});
+  }, [name, price]);
+
+  // Mobile sticky "Enquire" bar: visible while the main button is off-screen,
+  // hidden again once the end of the product content (footer) is reached.
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const endRef = useRef<HTMLDivElement>(null);
+  const [ctaVisible, setCtaVisible] = useState(true);
+  const [endReached, setEndReached] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === ctaRef.current) setCtaVisible(entry.isIntersecting);
+        if (entry.target === endRef.current)
+          setEndReached(entry.isIntersecting || entry.boundingClientRect.top < 0);
+      }
+    });
+    if (ctaRef.current) observer.observe(ctaRef.current);
+    if (endRef.current) observer.observe(endRef.current);
+    return () => observer.disconnect();
+  }, []);
+  const showStickyCta = !ctaVisible && !endReached;
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-white pt-20 pb-32">
@@ -209,8 +247,33 @@ export default function ProductView({
                 })}
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
+            {/* Primary CTA */}
+            <div
+              ref={ctaRef}
+              className="flex flex-col gap-3 pt-4 items-center lg:items-start"
+            >
+              <a
+                href={INSTAGRAM_DM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleEnquire}
+                className="w-full sm:w-auto flex items-center justify-center gap-3 bg-[#ee2b8c] text-white px-10 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-[#d41b76] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span>Enquire to Order</span>
+              </a>
+              <p
+                aria-live="polite"
+                className={`${poppins.className} text-xs text-gray-500 text-center lg:text-left`}
+              >
+                {enquireCopied
+                  ? "Message copied — just paste it in the Instagram chat."
+                  : "Opens a chat with the studio on Instagram."}
+              </p>
+            </div>
+
+            {/* Secondary Actions */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               {instagramLink && (
                 <a
                   href={instagramLink}
@@ -239,6 +302,17 @@ export default function ProductView({
                   </>
                 )}
               </button>
+            </div>
+
+            {/* Ordering note (from Terms: 4–5 days lead time, UPI advance) */}
+            <div className="flex items-start gap-3 justify-center lg:justify-start border-t border-[#2a1b1b]/5 pt-6 max-w-xl">
+              <Clock className="w-4 h-4 mt-1 shrink-0 text-[#ee2b8c]" />
+              <p
+                className={`${poppins.className} text-sm text-gray-600 leading-relaxed text-left`}
+              >
+                Handcrafted to order — please order 4–5 days in advance. An
+                advance UPI payment confirms your order.
+              </p>
             </div>
           </motion.div>
         </div>
@@ -272,6 +346,47 @@ export default function ProductView({
           </div>
         </section>
       )}
+
+      {/* End-of-content marker for the sticky bar */}
+      <div ref={endRef} aria-hidden className="h-px" />
+
+      {/* Mobile sticky Enquire bar */}
+      <AnimatePresence>
+        {showStickyCta && (
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-md border-t border-pink-100 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] flex items-center gap-4 shadow-[0_-8px_30px_rgba(0,0,0,0.05)]"
+          >
+            <div className="min-w-0 flex-1">
+              <p
+                className={`${playfair.className} truncate text-base text-[#2a1b1b] leading-tight`}
+              >
+                {name}
+              </p>
+              {!!price && (
+                <p
+                  className={`${poppins.className} text-sm font-medium text-[#ee2b8c] leading-tight`}
+                >
+                  {formatPrice(price)}
+                </p>
+              )}
+            </div>
+            <a
+              href={INSTAGRAM_DM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleEnquire}
+              className="shrink-0 flex items-center gap-2 bg-[#ee2b8c] text-white px-5 py-3 rounded-full text-[11px] font-bold tracking-[0.15em] uppercase hover:bg-[#d41b76] transition-colors shadow-md"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Enquire
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
