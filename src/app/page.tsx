@@ -1,13 +1,13 @@
 import { client } from "@/sanity/client";
-import { PRODUCTS_GRID } from "@/sanity/queries";
+import { NEW_ARRIVALS } from "@/sanity/queries";
 import HeroSection from "@/components/hero-section";
 import FeaturesSection from "@/components/features-section";
 import SignatureCollection from "@/components/signature-collection";
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function HomePage() {
-  const products = await client.fetch(PRODUCTS_GRID);
+  const products = await client.fetch(NEW_ARRIVALS);
 
   return (
     <main className="relative animate-fade-up">

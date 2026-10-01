@@ -1,61 +1,22 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* -------------------------------
    Lovique Studio Global Styles
 --------------------------------*/
-
-/* 🌸 Color Palette (Baby Pink Theme) */
-:root {
-  --baby-pink-50: #fff5f8;
-  --baby-pink-100: #ffe4ec;
-  --baby-pink-200: #ffc8d9;
-  --baby-pink-300: #ffabc5;
-  --baby-pink-400: #ff8fb3;
-  --baby-pink-500: #ff73a1;
-  --baby-pink-600: #ff5b90;
-  --baby-pink-700: #e64b7f;
-}
-
-/* Hero/product fade-up animation */
-@keyframes fade-up {
-  0% {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.animate-fade-up {
-  animation: fade-up 0.7s ease-out forwards;
-}
-
-.divider {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--baby-pink-200),
-    transparent
-  );
-  height: 1px;
-  opacity: 0.5;
-}
 
 /* ✨ Global Base */
 html,
 body {
   scroll-behavior: smooth;
-  /* background-color: var(--baby-pink-50); */
   color: #333;
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
+}
+
+/* --font-sans / --font-serif come from next/font (src/lib/fonts.ts) on <body> */
+body {
+  font-family: var(--font-sans), sans-serif;
 }
 
 /* 🩷 Typography tweaks */
@@ -65,12 +26,12 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-serif), serif;
   color: #111827;
 }
 
 p {
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-sans), sans-serif;
   line-height: 1.75;
   color: #374151;
 }
@@ -82,36 +43,7 @@ a {
 }
 
 a:hover {
-  /* color: var(--baby-pink-600); */
   color: black;
-}
-
-/* 🪞 Frosted glass helper class */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 192, 203, 0.2);
-  box-shadow: 0 4px 10px rgba(255, 192, 203, 0.1);
-}
-
-/* 🌸 Button style baseline (optional override) */
-.btn {
-  @apply rounded-full font-medium transition shadow-md hover:shadow-lg focus:ring-2 focus:ring-pink-200;
-}
-
-.btn-primary {
-  @apply bg-[var(--baby-pink-500)] text-white px-8 py-3 hover:bg-[var(--baby-pink-600)];
-}
-
-/* 🌿 WhatsApp button hover fix */
-.btn-whatsapp {
-  @apply bg-green-500 text-white transition shadow-md hover:shadow-lg;
-}
-
-.btn-whatsapp:hover {
-  /* green-600 bg */
-  color: #0e5227; /* green-700 text */
 }
 
 /* 🌼 Scrollbar Styling - Hidden */
@@ -129,26 +61,6 @@ section {
   scroll-margin-top: 100px; /* prevents header overlap on anchor links */
 }
 
-/* 🌸 Animations (petal float etc.) */
-@keyframes float-slow {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translateY(-20px) rotate(10deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0) rotate(-5deg);
-    opacity: 0.6;
-  }
-}
-
-.animate-float-slow {
-  animation: float-slow 6s ease-in-out infinite;
-}
-
 /* 🩰 Fade-ins */
 @keyframes fade-up {
   0% {
@@ -161,37 +73,58 @@ section {
   }
 }
 
-.fade-up {
-  animation: fade-up 0.8s ease-out forwards;
+.animate-fade-up {
+  animation: fade-up 0.7s ease-out forwards;
 }
 
-/* 🌺 Card hover lift */
-.card-hover {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+/* 🌸 Ambient background blobs (see components/ambient-blob.tsx)
+   Pure CSS transforms on a radial gradient — runs on the compositor,
+   no blur filter or JS per frame. Each blob sets --dx/--dy/--ds/--dur. */
+@keyframes drift {
+  to {
+    transform: translate(var(--dx, 0), var(--dy, 0)) scale(var(--ds, 1));
+  }
 }
 
-.card-hover:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 16px rgba(255, 115, 161, 0.15);
+@keyframes wander {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.6;
+  }
+  33% {
+    transform: translate(40px, -70px);
+    opacity: 0.8;
+  }
+  66% {
+    transform: translate(-40px, 40px);
+    opacity: 0.7;
+  }
 }
 
-/* 🌸 Responsive helpers */
-@media (max-width: 640px) {
-  .glass {
-    backdrop-filter: blur(8px);
+.ambient-drift {
+  animation: drift var(--dur, 6s) ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.ambient-wander {
+  animation: wander var(--dur, 18s) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Respect OS "reduce motion" setting for all CSS animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
 :root {
-  --baby-pink-50: #fff5f8;
-  --baby-pink-100: #ffe4ec;
-  --baby-pink-200: #ffc8d9;
-  --baby-pink-300: #ffabc5;
-  --baby-pink-400: #ff8fb3;
-  --baby-pink-500: #ff73a1;
-  --baby-pink-600: #ff5b90;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -225,12 +158,3 @@ section {
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
-
-/* @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-} */

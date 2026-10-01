@@ -3,12 +3,21 @@ import { PRODUCT_BY_SLUG, RELATED_PRODUCTS } from "@/sanity/queries";
 import ProductView from "@/components/product-view";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { cache } from "react";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
-async function getProduct(slug: string) {
-  return client.fetch(PRODUCT_BY_SLUG, { slug });
+// cache() dedupes the call shared by generateMetadata and the page
+const getProduct = cache(async (slug: string) =>
+  client.fetch(PRODUCT_BY_SLUG, { slug }),
+);
+
+// Prebuild every product page; new products still render on first visit, then cache
+export async function generateStaticParams() {
+  const slugs: string[] = await client.fetch(
+    `*[_type == "product" && defined(slug.current)].slug.current`,
+  );
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

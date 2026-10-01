@@ -1,13 +1,12 @@
 import { client } from "@/sanity/client";
+import { playfair, poppins } from "@/lib/fonts";
 import { PRODUCTS_BY_CATEGORY } from "@/sanity/queries";
 import { ProductCard } from "@/components/product-card";
-import { Playfair_Display, Poppins } from "next/font/google";
 import BrandBackground from "@/components/brand-background";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400"] });
-const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600"] });
+export const revalidate = 60;
 
 type Product = {
   _id: string;
@@ -18,7 +17,7 @@ type Product = {
   category?: string;
   isNew?: boolean;
   slug: { current: string };
-  cover?: { url?: string };
+  cover?: { url?: string; lqip?: string };
 };
 
 const categoryMap: Record<string, { title: string; description: string }> = {
@@ -47,6 +46,10 @@ const categoryMap: Record<string, { title: string; description: string }> = {
     description: "Stunning forever flower wall pieces that transform your walls into art.",
   },
 };
+
+export function generateStaticParams() {
+  return Object.keys(categoryMap).map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -118,6 +121,7 @@ export default async function CategoryPage({
                 theme={product.theme}
                 price={product.price}
                 coverUrl={product.cover?.url}
+                coverLqip={product.cover?.lqip}
                 category={product.category}
                 instagramLink={product.instagramLink}
                 isNew={product.isNew}

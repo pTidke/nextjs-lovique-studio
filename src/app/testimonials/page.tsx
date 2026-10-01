@@ -1,6 +1,7 @@
 import { client } from "@/sanity/client";
-import Image from "next/image";
-import { Playfair_Display, Poppins } from "next/font/google";
+import { TESTIMONIALS } from "@/sanity/queries";
+import { playfair, poppins } from "@/lib/fonts";
+import SanityImage from "@/components/sanity-image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,18 +10,6 @@ export const metadata: Metadata = {
     "Read what our happy customers say about their Lovique Studio forever flower arrangements.",
 };
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
-
-export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
 type Testimonial = {
@@ -32,15 +21,7 @@ type Testimonial = {
 };
 
 export default async function TestimonialsPage() {
-  const testimonials: Testimonial[] = await client.fetch(`
-    *[_type == "testimonial"] | order(date desc) {
-      _id,
-      name,
-      message,
-      date,
-      "pfp": pfp.asset->url
-    }
-  `);
+  const testimonials: Testimonial[] = await client.fetch(TESTIMONIALS);
 
   return (
     <main className="min-h-screen bg-white">
@@ -85,7 +66,7 @@ export default async function TestimonialsPage() {
                   <div className="absolute inset-0 bg-[#ee2b8c]/5 rounded-full blur-2xl group-hover:bg-[#ee2b8c]/10 transition-colors" />
                   {t.pfp ? (
                     <div className="relative w-full h-full rounded-full overflow-hidden border border-white shadow-sm">
-                      <Image
+                      <SanityImage
                         src={t.pfp}
                         alt={t.name}
                         fill

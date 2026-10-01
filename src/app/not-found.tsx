@@ -1,16 +1,5 @@
 import Link from "next/link";
-import { Playfair_Display, Poppins } from "next/font/google";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
+import { playfair, poppins } from "@/lib/fonts";
 
 export default function NotFound() {
   return (

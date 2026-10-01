@@ -1,7 +1,7 @@
 import { client } from "@/sanity/client";
+import { playfair, poppins } from "@/lib/fonts";
 import { PRODUCTS_GRID } from "@/sanity/queries";
 import { ProductCard } from "@/components/product-card";
-import { Playfair_Display, Poppins } from "next/font/google";
 import BrandBackground from "@/components/brand-background";
 import type { Metadata } from "next";
 
@@ -11,18 +11,7 @@ export const metadata: Metadata = {
     "Browse the full collection of handcrafted forever flower arrangements from Lovique Studio.",
 };
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
-
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function CataloguePage() {
   const products = await client.fetch(PRODUCTS_GRID);
@@ -33,7 +22,7 @@ export default async function CataloguePage() {
     theme?: string;
     price?: number;
     slug: { current: string };
-    cover?: { url?: string };
+    cover?: { url?: string; lqip?: string };
     category?: string;
     instagramLink?: string;
     isNew?: boolean;
@@ -76,6 +65,7 @@ export default async function CataloguePage() {
               theme={product.theme}
               price={product.price}
               coverUrl={product.cover?.url}
+              coverLqip={product.cover?.lqip}
               category={product.category}
               instagramLink={product.instagramLink}
               isNew={product.isNew}

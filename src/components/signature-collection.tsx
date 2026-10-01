@@ -1,30 +1,19 @@
 "use client";
 
-import Image from "next/image";
+import SanityImage from "@/components/sanity-image";
+import { playfair, poppins } from "@/lib/fonts";
 import Link from "next/link";
 import { ArrowRight, Instagram } from "lucide-react";
-import { Playfair_Display, Poppins } from "next/font/google";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { formatPrice } from "@/lib/utils";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
 
 type Product = {
   _id: string;
   name: string;
   theme?: string;
   slug: { current: string };
-  cover?: { url?: string };
+  cover?: { url?: string; lqip?: string };
   price?: number;
   description?: string;
   instagramLink?: string;
@@ -40,8 +29,7 @@ export default function SignatureCollection({
   products,
 }: SignatureCollectionProps) {
   const router = useRouter();
-  // Show only products tagged as "New Arrival", limit to 3
-  const displayedProducts = products.filter((p) => p.isNew).slice(0, 3);
+  const displayedProducts = products; // already filtered to 3 new arrivals by NEW_ARRIVALS
 
   const categoryDisplayMap: Record<string, string> = {
     singles: "Singles",
@@ -96,8 +84,9 @@ export default function SignatureCollection({
               {/* Image Container with Studio Styling */}
               <div className="relative aspect-[3/4] overflow-hidden bg-[#fffafa] rounded-t-[1.5rem]">
                 {product.cover?.url ? (
-                  <Image
+                  <SanityImage
                     src={product.cover.url}
+                    lqip={product.cover.lqip}
                     alt={product.name}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-[0.98] mix-blend-multiply"

@@ -1,7 +1,7 @@
 "use client";
 
-import { Playfair_Display, Poppins } from "next/font/google";
-import Image from "next/image";
+import SanityImage from "@/components/sanity-image";
+import { playfair, poppins } from "@/lib/fonts";
 import Carousel from "@/components/carousel";
 import { Instagram, ChevronLeft, Share2, Check } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -16,23 +16,14 @@ const EMOJI_REGEX = new RegExp(
   "gu",
 );
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
-
 type ProductImage = {
   asset: {
     _ref: string;
     _type: string;
   };
   _key: string;
+  url?: string;
+  lqip?: string;
 };
 
 type RelatedProduct = {
@@ -40,7 +31,7 @@ type RelatedProduct = {
   name: string;
   theme?: string;
   slug: { current: string };
-  cover?: { url?: string };
+  cover?: { url?: string; lqip?: string };
   price?: number;
   category?: string;
   isNew?: boolean;
@@ -271,8 +262,9 @@ export default function ProductView({
                 >
                   <div className="relative aspect-[3/4] overflow-hidden rounded-t-[1.5rem] bg-[#fffafa]">
                     {item.cover?.url ? (
-                      <Image
+                      <SanityImage
                         src={item.cover.url}
+                        lqip={item.cover.lqip}
                         alt={item.name}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"

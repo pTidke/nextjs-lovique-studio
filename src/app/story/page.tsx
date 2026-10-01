@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Playfair_Display, Poppins } from "next/font/google";
+import { playfair, poppins } from "@/lib/fonts";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,17 +7,6 @@ export const metadata: Metadata = {
   description:
     "Discover how Lovique Studio was born from a passion for preserving love through handcrafted forever flowers.",
 };
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
 
 export default function StoryPage() {
   return (

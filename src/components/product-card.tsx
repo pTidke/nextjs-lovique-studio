@@ -1,29 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import { Playfair_Display } from "next/font/google";
-
-// const poppins = Poppins({
-//   subsets: ["latin"],
-//   weight: ["300", "400", "500"],
-//   variable: "--font-sans",
-// });
-
+import SanityImage from "@/components/sanity-image";
+import { playfair, poppins } from "@/lib/fonts";
 import { Instagram } from "lucide-react";
-import { Poppins } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { formatPrice } from "@/lib/utils";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "600"],
-  variable: "--font-serif",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
 
 type Props = {
   slug: string;
@@ -31,6 +12,7 @@ type Props = {
   theme?: string;
   price?: number;
   coverUrl?: string;
+  coverLqip?: string;
   instagramLink?: string;
   category?: string;
   isNew?: boolean;
@@ -42,6 +24,7 @@ export function ProductCard({
   theme,
   price,
   coverUrl,
+  coverLqip,
   instagramLink,
   category,
   isNew,
@@ -69,8 +52,9 @@ export function ProductCard({
       <div className="relative aspect-[3/4] w-full bg-[#fffafa] overflow-hidden rounded-t-[1.5rem]">
         {/* Main Image with Studio Styling */}
         {coverUrl ? (
-          <Image
+          <SanityImage
             src={coverUrl}
+            lqip={coverLqip}
             alt={name}
             fill
             className="object-cover object-center transition-transform duration-700 group-hover:scale-105 opacity-[0.98] mix-blend-multiply"

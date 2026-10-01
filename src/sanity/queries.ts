@@ -1,3 +1,6 @@
+// Shared projection for a product's first image, incl. a tiny blurred preview (LQIP)
+const COVER = /* groq */ `"cover": images[0]{..., "url": asset->url, "lqip": asset->metadata.lqip}`;
+
 export const PRODUCTS_GRID = /* groq */ `
 *[_type == "product"] | order(select(isNew == true => 1, 0) desc, _createdAt desc){
   _id,
@@ -6,11 +9,24 @@ export const PRODUCTS_GRID = /* groq */ `
   price,
   description,
   instagramLink,
-  whatsappLink,
   category,
   isNew,
   slug,
-  "cover": images[0]{..., "url": asset->url}
+  ${COVER}
+}
+`;
+
+export const NEW_ARRIVALS = /* groq */ `
+*[_type == "product" && isNew == true] | order(_createdAt desc)[0...3]{
+  _id,
+  name,
+  theme,
+  price,
+  instagramLink,
+  category,
+  isNew,
+  slug,
+  ${COVER}
 }
 `;
 
@@ -22,8 +38,7 @@ export const PRODUCT_BY_SLUG = /* groq */ `
   price,
   description,
   slug,
-  images[]{..., "url": asset->url},
-  whatsappLink,
+  images[]{..., "url": asset->url, "lqip": asset->metadata.lqip},
   instagramLink,
   category,
   isNew
@@ -39,11 +54,10 @@ export const PRODUCTS_BY_CATEGORY = /* groq */ `
   price,
   description,
   instagramLink,
-  whatsappLink,
   category,
   isNew,
   slug,
-  "cover": images[0]{..., "url": asset->url}
+  ${COVER}
 }
 `;
 
@@ -57,7 +71,7 @@ export const RELATED_PRODUCTS = /* groq */ `
   category,
   isNew,
   instagramLink,
-  "cover": images[0]{..., "url": asset->url}
+  ${COVER}
 }
 `;
 

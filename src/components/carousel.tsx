@@ -2,7 +2,7 @@
 
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import Image from "next/image";
+import SanityImage from "@/components/sanity-image";
 import { useCallback, useState, useEffect } from "react";
 import { urlFor } from "@/sanity/image";
 import { X, ZoomIn } from "lucide-react";
@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 type ImageType = {
   asset?: { _ref?: string; url?: string };
   url?: string;
+  lqip?: string;
 };
 
 const getImageUrl = (img: ImageType) =>
@@ -57,6 +58,9 @@ export default function Carousel({
 
     emblaApi.on("select", onSelect);
     onSelect();
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
   }, [emblaApi, thumbsApi]);
 
   const scrollTo = (index: number) => emblaApi?.scrollTo(index);
@@ -89,10 +93,12 @@ export default function Carousel({
                   idx === selectedIndex ? "opacity-100 z-10" : "opacity-0 z-0"
                 }`}
               >
-                <Image
+                <SanityImage
                   src={imageUrl}
                   alt={`${name} - image ${idx + 1}`}
                   fill
+                  lqip={img.lqip}
+                  sizes="(min-width: 1024px) 560px, (min-width: 528px) 480px, 100vw"
                   className="object-cover object-center rounded-2xl"
                   priority={idx === 0}
                 />
@@ -157,10 +163,11 @@ export default function Carousel({
                       : "border-transparent opacity-60 hover:opacity-100"
                   }`}
               >
-                <Image
+                <SanityImage
                   src={thumbUrl}
                   alt={`Thumbnail ${idx + 1}`}
                   fill
+                  sizes="80px"
                   className="object-cover"
                 />
               </button>
@@ -223,12 +230,12 @@ export default function Carousel({
               className="relative w-full max-w-3xl aspect-[3/4] max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
+              <SanityImage
                 src={getImageUrl(images[selectedIndex])}
                 alt={`${name} - image ${selectedIndex + 1}`}
                 fill
                 className="object-contain"
-                sizes="100vw"
+                sizes="(min-width: 768px) 768px, 100vw"
                 priority
               />
             </motion.div>

@@ -1,13 +1,8 @@
 "use client";
 
 import { Flower2, PartyPopper, Gift } from "lucide-react";
-import { Poppins } from "next/font/google";
+import { poppins } from "@/lib/fonts";
 import { motion } from "framer-motion";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
 
 const features = [
   {

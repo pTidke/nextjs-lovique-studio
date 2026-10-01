@@ -1,19 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { playfair, poppins } from "@/lib/fonts";
 import { X } from "lucide-react";
-import { Playfair_Display, Poppins } from "next/font/google";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
 
 interface LegalModalProps {
   isOpen: boolean;

@@ -1,23 +1,12 @@
 import "./globals.css";
-import { Poppins, Playfair_Display } from "next/font/google";
 import type { Metadata } from "next";
+import { playfair, poppins } from "@/lib/fonts";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import GlobalPetals from "@/components/global-petals"; // client-only petals wrapper
 import ScrollReset from "@/components/scroll-reset";
 import NavigationTracker from "@/components/navigation-tracker";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  variable: "--font-sans",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "600"],
-  variable: "--font-serif",
-});
+import MotionProvider from "@/components/motion-provider";
 
 export const metadata: Metadata = {
   title: "Lovique Studio",
@@ -40,14 +29,16 @@ export default function RootLayout({
           <GlobalPetals />
         </div>
 
-        {/* Header */}
-        <Header />
-        <NavigationTracker />
-        <ScrollReset />
-        <div className="flex-1 relative z-10">{children}</div>
+        <MotionProvider>
+          {/* Header */}
+          <Header />
+          <NavigationTracker />
+          <ScrollReset />
+          <div className="flex-1 relative z-10">{children}</div>
 
-        {/* Footer */}
-        <Footer />
+          {/* Footer */}
+          <Footer />
+        </MotionProvider>
       </body>
     </html>
   );

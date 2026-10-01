@@ -1,22 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import { playfair, poppins } from "@/lib/fonts";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Playfair_Display, Poppins } from "next/font/google";
 import LegalModal from "@/components/legal-modal";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
 
 export default function Footer() {
   const pathname = usePathname();
@@ -124,7 +113,6 @@ export default function Footer() {
                   alt="Lovique Florist Illustration"
                   fill
                   className="object-contain"
-                  priority
                 />
               </div>
             </div>
