@@ -7,7 +7,7 @@ import SanityImage from "@/components/sanity-image";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { useDialog } from "@/lib/use-dialog";
 import { urlFor } from "@/sanity/image";
-import { X, ZoomIn } from "lucide-react";
+import { X, ZoomIn, ChevronLeft, ChevronRight, Flower2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const getImageUrl = (img: SanityImageData) =>
@@ -27,7 +27,7 @@ export default function Carousel({
   const images = (rawImages ?? []).filter((img) => getImageUrl(img));
 
   // Auto-slide every 4 seconds
-  const autoplay = Autoplay({ delay: 4000, stopOnInteraction: false });
+  const autoplay = Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true });
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "center", duration: 20 },
@@ -81,45 +81,47 @@ export default function Carousel({
 
   if (images.length === 0) {
     return (
-      <div className="w-full max-w-[480px] lg:max-w-[560px] aspect-[6/8] rounded-2xl border border-pink-100 bg-rose-50 flex items-center justify-center text-rose-400">
-        No image
+      <div className="flex aspect-[6/8] w-full flex-col items-center justify-center gap-2 rounded-2xl bg-blush-deep text-brand/70">
+        <Flower2 className="h-10 w-10" strokeWidth={1.25} />
+        <span className="text-sm">Photos coming soon</span>
       </div>
     );
   }
 
+  const multiple = images.length > 1;
+  const arrowClass =
+    "absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-ink shadow-[0_4px_14px_rgba(42,27,27,0.12)] transition-colors hover:bg-white hover:text-brand";
+
   return (
-    <div className="flex flex-col items-center w-full max-w-[480px] lg:max-w-[560px]">
+    <div className="flex w-full flex-col items-center">
       {/* Main Carousel */}
       <div
-        className="relative w-full overflow-hidden rounded-2xl bg-white/95 backdrop-blur-md border border-pink-100 shadow-sm"
+        className="relative max-h-[62svh] w-full overflow-hidden rounded-2xl bg-blush-deep lg:max-h-[75vh]"
         ref={emblaRef}
-        style={{ maxHeight: "75vh" }}
       >
         <div className="flex relative">
-          {images?.map((img, idx) => {
+          {images.map((img, idx) => {
             const imageUrl = getImageUrl(img);
 
             return (
               <div
                 key={idx}
-                className={`flex-[0_0_100%] relative aspect-[6/8] transition-opacity duration-1000 ${
-                  idx === selectedIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-                }`}
+                className="relative aspect-[6/8] flex-[0_0_100%]"
               >
                 <SanityImage
                   src={imageUrl}
-                  alt={`${name} - image ${idx + 1}`}
+                  alt={`${name} — photo ${idx + 1} of ${images.length}`}
                   fill
                   lqip={img.lqip}
-                  sizes="(min-width: 1024px) 560px, (min-width: 528px) 480px, 100vw"
-                  className="object-cover object-center rounded-2xl"
+                  sizes="(min-width: 1024px) 560px, 100vw"
+                  className="object-cover object-center"
                   priority={idx === 0}
                 />
                 <button
                   type="button"
                   onClick={() => setLightboxOpen(true)}
                   tabIndex={idx === selectedIndex ? 0 : -1}
-                  aria-label={`View image ${idx + 1} of ${images.length} full screen`}
+                  aria-label={`View photo ${idx + 1} of ${images.length} full screen`}
                   className="absolute inset-0 cursor-zoom-in rounded-2xl focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-brand"
                 />
               </div>
@@ -128,135 +130,120 @@ export default function Carousel({
         </div>
 
         {/* Zoom hint */}
-        <div className="absolute top-3 right-3 z-20 bg-white/70 backdrop-blur-sm rounded-full p-2 pointer-events-none opacity-60">
-          <ZoomIn className="w-4 h-4 text-gray-500" />
+        <div className="pointer-events-none absolute right-3 top-3 z-20 rounded-full bg-white/80 p-2">
+          <ZoomIn className="h-4 w-4 text-ink-soft" />
         </div>
 
-        {/* Navigation Arrows */}
-        <button
-          onClick={scrollPrev}
-          className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 backdrop-blur-md border border-pink-100/50 text-brand rounded-full w-9 h-9 flex items-center justify-center text-lg hover:bg-white hover:scale-110 transition-all shadow-sm"
-          aria-label="Previous image"
-        >
-          ‹
-        </button>
+        {multiple && (
+          <>
+            <button type="button" onClick={scrollPrev} className={`${arrowClass} left-3`} aria-label="Previous photo">
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button type="button" onClick={scrollNext} className={`${arrowClass} right-3`} aria-label="Next photo">
+              <ChevronRight className="h-5 w-5" />
+            </button>
 
-        <button
-          onClick={scrollNext}
-          className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 backdrop-blur-md border border-pink-100/50 text-brand rounded-full w-9 h-9 flex items-center justify-center text-lg hover:bg-white hover:scale-110 transition-all shadow-sm"
-          aria-label="Next image"
-        >
-          ›
-        </button>
-
-        {/* Dots */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-          {images?.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => scrollTo(idx)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                idx === selectedIndex
-                  ? "bg-pink-500 scale-125 shadow-[0_0_6px_rgba(255,115,161,0.6)]"
-                  : "bg-pink-200 hover:bg-pink-300"
-              }`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
+            {/* Position indicator (thumbnails below handle navigation) */}
+            <div aria-hidden className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-1.5">
+              {images.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === selectedIndex ? "w-5 bg-white" : "w-1.5 bg-white/60"
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Thumbnails */}
-      <div className="w-full mt-4 overflow-hidden" ref={thumbsRef}>
-        <div className="flex gap-2 justify-center">
-          {images?.map((img, idx) => {
-            const thumbUrl = getImageUrl(img);
-
-            return (
+      {multiple && (
+        <div className="mt-3 w-full overflow-hidden" ref={thumbsRef}>
+          <div className="flex justify-center gap-2 py-1">
+            {images.map((img, idx) => (
               <button
                 key={idx}
+                type="button"
                 onClick={() => scrollTo(idx)}
-                className={`relative w-16 h-16 md:w-20 md:h-20 rounded-lg my-4 mx-1 overflow-hidden border-2 transition-all duration-200
-                  ${
-                    idx === selectedIndex
-                      ? "border-pink-500 scale-105 shadow-sm"
-                      : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
+                aria-label={`Show photo ${idx + 1}`}
+                aria-current={idx === selectedIndex ? "true" : undefined}
+                className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 transition-[border-color,opacity] duration-200 md:h-20 md:w-20 ${
+                  idx === selectedIndex ? "border-brand" : "border-transparent opacity-60 hover:opacity-100"
+                }`}
               >
-                <SanityImage
-                  src={thumbUrl}
-                  alt={`Thumbnail ${idx + 1}`}
-                  fill
-                  sizes="80px"
-                  className="object-cover"
-                />
+                <SanityImage src={getImageUrl(img)} alt="" fill sizes="80px" className="object-cover" />
               </button>
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Lightbox */}
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
             ref={lightboxRef}
+            tabIndex={-1}
             role="dialog"
             aria-modal="true"
-            aria-label={`${name} images`}
+            aria-label={`${name} photos`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/95 p-4 outline-none"
             onClick={() => setLightboxOpen(false)}
           >
             <button
+              type="button"
               onClick={() => setLightboxOpen(false)}
-              className="absolute top-6 right-6 z-10 text-white/70 hover:text-white transition-colors"
-              aria-label="Close lightbox"
+              className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full text-white/80 transition-colors hover:text-white md:right-6 md:top-6"
+              aria-label="Close"
             >
-              <X className="w-8 h-8" />
+              <X className="h-7 w-7" />
             </button>
 
-            {/* Navigation */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                const prev =
-                  selectedIndex === 0 ? images.length - 1 : selectedIndex - 1;
-                scrollTo(prev);
-              }}
-              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-4xl transition-colors z-10"
-              aria-label="Previous image"
-            >
-              ‹
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                const next =
-                  selectedIndex === images.length - 1 ? 0 : selectedIndex + 1;
-                scrollTo(next);
-              }}
-              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-4xl transition-colors z-10"
-              aria-label="Next image"
-            >
-              ›
-            </button>
+            {multiple && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    scrollTo(selectedIndex === 0 ? images.length - 1 : selectedIndex - 1);
+                  }}
+                  className="absolute left-2 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full text-white/70 transition-colors hover:text-white md:left-6"
+                  aria-label="Previous photo"
+                >
+                  <ChevronLeft className="h-8 w-8" />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    scrollTo(selectedIndex === images.length - 1 ? 0 : selectedIndex + 1);
+                  }}
+                  className="absolute right-2 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full text-white/70 transition-colors hover:text-white md:right-6"
+                  aria-label="Next photo"
+                >
+                  <ChevronRight className="h-8 w-8" />
+                </button>
+              </>
+            )}
 
             {/* Image */}
             <motion.div
               key={selectedIndex}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-3xl aspect-[3/4] max-h-[85vh]"
+              className="relative aspect-[3/4] max-h-[85vh] w-full max-w-3xl"
               onClick={(e) => e.stopPropagation()}
             >
               <SanityImage
                 src={getImageUrl(images[selectedIndex])}
-                alt={`${name} - image ${selectedIndex + 1}`}
+                alt={`${name} — photo ${selectedIndex + 1} of ${images.length}`}
                 fill
                 className="object-contain"
                 sizes="(min-width: 768px) 768px, 100vw"
@@ -264,10 +251,11 @@ export default function Carousel({
               />
             </motion.div>
 
-            {/* Counter */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-xs tracking-widest">
-              {selectedIndex + 1} / {images.length}
-            </div>
+            {multiple && (
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-sm text-white/70">
+                {selectedIndex + 1} / {images.length}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

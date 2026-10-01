@@ -33,7 +33,7 @@ export const categoryMap: Record<string, Category> = {
   magazine: {
     title: "Magazine",
     label: "Magazine",
-    description: "Unique magazine-style arrangements blending art with floral design.",
+    description: "Personalised magazine-style keepsakes, filled with your photos and words.",
   },
   wall_art: {
     title: "Wall Art",

@@ -12,7 +12,7 @@ export type SanityImage = {
   lqip?: string;
 };
 
-/** Card-sized product (PRODUCTS_GRID, PRODUCTS_BY_CATEGORY, NEW_ARRIVALS, RELATED_PRODUCTS) */
+/** Card-sized product (PRODUCTS_GRID, PRODUCTS_BY_CATEGORY, HOME_PRODUCTS, RELATED_PRODUCTS, MORE_PRODUCTS) */
 export type ProductSummary = {
   _id: string;
   name: string;

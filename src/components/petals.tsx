@@ -11,16 +11,15 @@ type Petal = {
   color: string;
 };
 
-export default function Petals({ count = 60 }: { count?: number }) {
+export default function Petals({ count = 8 }: { count?: number }) {
   const [petals, setPetals] = useState<Petal[]>([]);
 
   useEffect(() => {
+    // Brand pinks only — petals are a soft accent, not confetti
     const colors = [
-      "from-rose-300 to-rose-100", // pink
-      "from-yellow-300 to-yellow-100", // yellow
-      "from-blue-300 to-blue-100", // soft blue
-      "from-red-300 to-red-100", // red
-      "from-gray-700 to-gray-500", // blackish (muted)
+      "from-pink-300 to-pink-100",
+      "from-rose-300 to-rose-100",
+      "from-pink-200 to-rose-50",
     ];
 
     const generated: Petal[] = Array.from({ length: count }, (_, i) => {

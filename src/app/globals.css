@@ -1,13 +1,17 @@
 @import "tailwindcss";
 
-/* 🎨 Brand palette — use as text-brand, bg-blush, border-ink/10, etc. */
+/* 🎨 Brand palette — use as text-brand, bg-blush, border-ink/10, etc.
+   `brand` is the accessible pink (≈5:1 with white) for text, prices and button
+   fills; `brand-bright` is the original vivid pink, for decoration only. */
 @theme {
-  --color-brand: #ee2b8c;
-  --color-brand-dark: #d41b76;
+  --color-brand: #d41b76;
+  --color-brand-dark: #ad1462;
+  --color-brand-bright: #ee2b8c;
   --color-ink: #2a1b1b;
   --color-ink-soft: #4a3f3f;
   --color-blush: #fffafa;
   --color-blush-deep: #fff5f8;
+  --color-petal: #fde4ee;
 }
 
 /* -------------------------------
@@ -62,22 +66,22 @@
   section {
     scroll-margin-top: 100px; /* prevents header overlap on anchor links */
   }
-}
 
-/* 🩰 Fade-ins */
-@keyframes fade-up {
-  0% {
-    transform: translateY(30px);
-    opacity: 0;
+  /* Browser surfaces in the brand palette */
+  html {
+    scrollbar-color: color-mix(in oklab, var(--color-brand) 35%, white) transparent;
+    caret-color: var(--color-brand);
   }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
-.animate-fade-up {
-  animation: fade-up 0.7s ease-out forwards;
+  ::selection {
+    background: var(--color-petal);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+  }
 }
 
 /* 🌸 Ambient background blobs (see components/ambient-blob.tsx)
@@ -103,6 +107,37 @@
     transform: translate(-40px, 40px);
     opacity: 0.7;
   }
+}
+
+/* 🩰 Page fade-in (Our Story) */
+@keyframes fade-up {
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease-out forwards;
+}
+
+/* 💐 Hero photo fan: cards start stacked (already visible) and fan out once */
+@keyframes fan-settle {
+  from {
+    transform: translate(0, 4%) rotate(0deg);
+  }
+  to {
+    transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg));
+  }
+}
+
+.hero-fan-card {
+  transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg));
+  animation: fan-settle 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .ambient-drift {

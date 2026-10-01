@@ -1,40 +1,26 @@
 import { playfair, poppins } from "@/lib/fonts";
 
-// Shared layout for /privacy and /terms — header styled like Our Story
+// Shared layout for /privacy and /terms
 export default function LegalPage({
-  eyebrow,
   title,
   children,
 }: {
-  eyebrow: string;
   title: string;
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-white animate-fade-up">
-      <section className="bg-blush pt-40 pb-24 px-6">
-        <div className="max-w-3xl mx-auto flex flex-col items-center text-center space-y-6">
-          <span
-            className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand`}
-          >
-            {eyebrow}
-          </span>
-          <h1
-            className={`${playfair.className} italic text-5xl md:text-7xl text-ink leading-tight`}
-          >
-            {title}
-          </h1>
-          <div className="w-16 h-px bg-brand/30" />
-        </div>
-      </section>
+    <main className="min-h-screen bg-white pb-24">
+      <header className="bg-blush-deep px-6 pb-14 pt-28 text-center md:pb-16 md:pt-36">
+        <h1 className={`${playfair.className} text-5xl italic leading-tight text-ink md:text-6xl`}>
+          {title}
+        </h1>
+      </header>
 
-      <section className="max-w-2xl mx-auto px-6 py-20">
-        <div
-          className={`${poppins.className} text-sm md:text-base text-gray-600 leading-relaxed space-y-10`}
-        >
-          {children}
-        </div>
-      </section>
+      <div
+        className={`${poppins.className} mx-auto max-w-2xl space-y-10 px-6 pt-14 text-base leading-relaxed text-gray-700 md:pt-16`}
+      >
+        {children}
+      </div>
     </main>
   );
 }

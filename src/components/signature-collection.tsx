@@ -1,58 +1,33 @@
-"use client";
-
 import { playfair, poppins } from "@/lib/fonts";
-import type { ProductSummary } from "@/sanity/types";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
 import { ProductCard } from "@/components/product-card";
+import type { ProductSummary } from "@/sanity/types";
 
-interface SignatureCollectionProps {
-  products: ProductSummary[]; // already limited to 3 new arrivals by NEW_ARRIVALS
-}
-
-export default function SignatureCollection({
-  products,
-}: SignatureCollectionProps) {
-  // No product flagged "new" in Sanity — skip the section instead of an empty grid
+// "From the studio" row on the home page
+export default function SignatureCollection({ products }: { products: ProductSummary[] }) {
   if (products.length === 0) return null;
 
   return (
-    <section className="w-full py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-          <div className="space-y-4">
-            <span
-              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand`}
-            >
-              New Arrivals
-            </span>
-            <h2
-              className={`${playfair.className} italic text-4xl md:text-5xl lg:text-6xl text-ink`}
-            >
-              Our Collection
-            </h2>
-          </div>
+    <section className="w-full bg-white py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4 px-2 md:mb-14 md:px-0">
+          <h2 className={`${playfair.className} text-4xl leading-tight text-ink md:text-5xl`}>
+            From the studio
+          </h2>
           <Link
             href="/catalogue"
-            className={`${poppins.className} group flex items-center gap-2 text-[14px] md:text-sm font-bold tracking-[0.2em] uppercase text-gray-500 hover:text-brand transition-colors pb-1`}
+            className={`${poppins.className} group inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink hover:text-brand`}
           >
-            See All{" "}
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            See the full collection
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {products.map((product, index) => (
-            <motion.div
-              key={product._id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
+        <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-x-8">
+          {products.map((product, i) => (
+            // 2-up on phones: the third card would sit alone, so it appears from md
+            <div key={product._id} className={i === 2 ? "hidden md:block" : undefined}>
               <ProductCard
                 slug={product.slug.current}
                 name={product.name}
@@ -61,10 +36,9 @@ export default function SignatureCollection({
                 coverUrl={product.cover?.url}
                 coverLqip={product.cover?.lqip}
                 category={product.category}
-                instagramLink={product.instagramLink}
                 isNew={product.isNew}
               />
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -74,7 +74,7 @@ export default function Header() {
               height={40}
               className="object-contain"
             />
-            <span className="hidden md:block text-lg font-serif text-gray-900 tracking-wide">
+            <span className="hidden md:block text-lg font-serif text-ink tracking-wide">
               Lovique Studio
             </span>
           </Link>
@@ -82,7 +82,7 @@ export default function Header() {
           {/* Mobile Only: Centered Title */}
           <Link
             href="/"
-            className="md:hidden absolute left-1/2 -translate-x-1/2 z-50 text-lg font-serif text-gray-900 tracking-wide whitespace-nowrap"
+            className="md:hidden absolute left-1/2 -translate-x-1/2 z-50 text-lg font-serif text-ink tracking-wide whitespace-nowrap"
           >
             Lovique Studio
           </Link>
@@ -93,16 +93,13 @@ export default function Header() {
           </div>
 
           {/* Right Icons (Desktop) */}
-          <div className="hidden md:flex items-center gap-5 text-gray-700">
-            {/* <button className="hover:text-pink-500 transition">
-              <Search className="w-5 h-5" />
-            </button> */}
+          <div className="hidden md:flex items-center gap-5 text-ink-soft">
             <Link
               href="https://instagram.com/lovique._studio"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Lovique Studio on Instagram"
-              className="hover:text-pink-500 transition"
+              className="hover:text-brand transition"
             >
               <Instagram className="w-5 h-5" />
             </Link>
@@ -110,7 +107,7 @@ export default function Header() {
 
           {/* Mobile Toggle Button */}
           <button
-            className="md:hidden z-50 text-gray-900 p-2 -mr-2 transition-colors hover:text-pink-600"
+            className="md:hidden z-50 text-ink p-2 -mr-2 transition-colors hover:text-brand"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
@@ -131,11 +128,13 @@ export default function Header() {
           <motion.div
             ref={menuRef}
             id="mobile-menu"
+            tabIndex={-1}
+            aria-label="Menu"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 z-40 bg-[rgba(255,245,248,0.7)] backdrop-blur-xl md:hidden flex flex-col pt-24 px-6 pb-8 overflow-y-auto"
+            className="fixed inset-0 z-40 flex flex-col overflow-y-auto bg-blush-deep px-6 pb-8 pt-24 outline-none md:hidden"
           >
             <div className="flex flex-col gap-4 text-center items-center">
               <NavLinks
@@ -146,18 +145,15 @@ export default function Header() {
             </div>
 
             {/* Mobile Footer Actions */}
-            <div className="mt-auto flex flex-col gap-4 items-center border-t border-gray-100 pt-8">
-              <div className="flex gap-10 text-gray-500">
-                {/* <button className="flex flex-col items-center gap-1 text-[11px] uppercase tracking-widest hover:text-pink-600 transition">
-                  <Search className="w-5 h-5 mb-1" /> Search
-                </button> */}
+            <div className="mt-auto flex flex-col gap-4 items-center border-t border-ink/10 pt-8">
+              <div className="flex gap-10 text-ink-soft">
                 <Link
                   href="https://instagram.com/lovique._studio"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1 text-[11px] uppercase tracking-widest hover:text-pink-600 transition"
+                  className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-ink-soft transition-colors hover:text-brand"
                 >
-                  <Instagram className="w-5 h-5 mb-1" /> Instagram
+                  <Instagram className="h-5 w-5" /> Instagram
                 </Link>
               </div>
             </div>
@@ -184,10 +180,14 @@ function NavLinks({
   const categoriesId = useId();
   // Base styles for links
   const baseLinkStyle = isMobile
-    ? "text-xs font-bold tracking-[0.2em] uppercase text-gray-800 py-3" // Reduced size, cleaner tracking
-    : "text-xs font-bold tracking-[0.15em] uppercase text-gray-600 hover:text-black transition flex items-center gap-1";
+    ? "text-lg font-medium text-ink py-3"
+    : "text-sm font-medium text-ink-soft hover:text-ink transition-colors flex items-center gap-1 min-h-11";
 
-  const activeStyle = isMobile ? "text-pink-600" : "text-black";
+  // Current page: brand colour on mobile, a pink underline on desktop
+  const activeStyle = isMobile
+    ? "text-brand"
+    : "text-ink underline decoration-brand decoration-2 underline-offset-[6px]";
+  const onCategoryPage = pathname?.startsWith("/category/");
 
   return (
     <>
@@ -196,7 +196,7 @@ function NavLinks({
         onClick={onLinkClick}
         className={`${baseLinkStyle} ${pathname === "/catalogue" ? activeStyle : ""}`}
       >
-        Catalogue
+        Collection
       </Link>
 
       {/* Categories Dropdown */}
@@ -224,11 +224,11 @@ function NavLinks({
           onClick={() => setCategoriesOpen((open) => (isMobile ? !open : true))}
           aria-expanded={categoriesOpen}
           aria-controls={categoriesId}
-          className={`${baseLinkStyle} flex items-center justify-center gap-2`}
+          className={`${baseLinkStyle} flex items-center justify-center gap-2 ${onCategoryPage ? activeStyle : ""}`}
         >
           Categories
           <ChevronDown
-            className={`transition-transform duration-300 ${categoriesOpen ? "rotate-180" : ""} ${isMobile ? "w-4 h-4 text-gray-500" : "w-3 h-3"}`}
+            className={`transition-transform duration-300 ${categoriesOpen ? "rotate-180" : ""} ${isMobile ? "w-4 h-4 text-ink-soft" : "w-3.5 h-3.5"}`}
           />
         </button>
 
@@ -254,8 +254,8 @@ function NavLinks({
                 className={`
                   ${
                     isMobile
-                      ? "py-4 flex flex-col gap-2 items-center bg-white/40 backdrop-blur-md rounded-2xl mb-4 border border-white/50 shadow-sm"
-                      : "bg-white/95 backdrop-blur-md rounded-lg shadow-xl border border-pink-100/50 p-2 mt-2"
+                      ? "py-2 flex flex-col items-center"
+                      : "bg-white rounded-2xl shadow-[0_18px_40px_-16px_rgba(42,27,27,0.25)] border border-ink/5 p-2 mt-2"
                   }
                 `}
               >
@@ -265,11 +265,11 @@ function NavLinks({
                     href={`/category/${c.slug}`}
                     onClick={onLinkClick}
                     className={`
-                      block hover:text-pink-600 transition
+                      block transition-colors ${pathname === `/category/${c.slug}` ? "text-brand" : ""}
                       ${
                         isMobile
-                          ? "text-[11px] tracking-[0.2em] uppercase text-gray-500 py-2" // Smaller text in dropdown
-                          : "text-[11px] tracking-widest uppercase text-gray-600 px-4 py-2"
+                          ? "text-base text-ink-soft py-2.5 hover:text-brand"
+                          : "text-sm text-ink-soft px-4 py-2.5 rounded-xl hover:bg-blush-deep hover:text-brand"
                       }
                     `}
                   >

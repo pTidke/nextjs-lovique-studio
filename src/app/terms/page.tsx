@@ -12,7 +12,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function TermsPage() {
   return (
-    <LegalPage eyebrow="Studio Policies" title="Terms of Service">
+    <LegalPage title="Terms of Service">
       <TermsContent />
     </LegalPage>
   );

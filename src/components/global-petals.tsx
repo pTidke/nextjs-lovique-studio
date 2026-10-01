@@ -6,5 +6,5 @@ import dynamic from "next/dynamic";
 const Petals = dynamic(() => import("@/components/petals"), { ssr: false });
 
 export default function GlobalPetals() {
-  return <Petals count={22} />;
+  return <Petals count={8} />;
 }

@@ -1,97 +1,121 @@
 "use client";
 
 import { ProductCard } from "@/components/product-card";
-import type { Product, ProductSummary } from "@/sanity/types";
+import type { Product, ProductSummary, Testimonial } from "@/sanity/types";
 import { playfair, poppins } from "@/lib/fonts";
 import Carousel from "@/components/carousel";
-import {
-  Instagram,
-  ChevronLeft,
-  Share2,
-  Check,
-  MessageCircle,
-  Clock,
-} from "lucide-react";
+import HowItWorks from "@/components/how-it-works";
+import KindWords from "@/components/kind-words";
+import { Instagram, ChevronLeft, Share2, Check, MessageCircle } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import BrandBackground from "@/components/brand-background";
 import { EMOJI_REGEX, formatPrice } from "@/lib/utils";
 import { INSTAGRAM_DM_URL } from "@/lib/site";
+import { categoryMap } from "@/lib/categories";
+
+type Block =
+  | { kind: "para"; text: string }
+  | { kind: "label"; text: string }
+  | { kind: "list"; items: string[] };
+
+// Lines that start with an emoji, •, -, * or "1." are list items. The check runs
+// on the raw line, before emoji are stripped, so emoji-bulleted copy keeps its bullets.
+const BULLET_START = new RegExp("^(?:[\\p{Extended_Pictographic}•*\\-]|\\d+\\.)", "u");
+
+function parseDescription(raw?: string): Block[] {
+  const blocks: Block[] = [];
+  for (const line of (raw ?? "").split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const isBullet = BULLET_START.test(trimmed);
+    const text = trimmed
+      .replace(EMOJI_REGEX, "")
+      .replace(/^\s*(?:[•*\-]|\d+\.)\s*/, "")
+      .trim();
+    if (!text) continue;
+
+    if (isBullet) {
+      const last = blocks[blocks.length - 1];
+      if (last?.kind === "list") last.items.push(text);
+      else blocks.push({ kind: "list", items: [text] });
+    } else if (text.endsWith(":") && text.length < 40) {
+      blocks.push({ kind: "label", text: text.slice(0, -1) });
+    } else {
+      blocks.push({ kind: "para", text });
+    }
+  }
+  return blocks;
+}
 
 export default function ProductView({
   product,
   relatedProducts = [],
+  testimonials = [],
 }: {
   product: Product;
   relatedProducts?: ProductSummary[];
+  testimonials?: Testimonial[];
 }) {
-  const [backInfo, setBackInfo] = useState({
-    href: "/",
-    label: "Back to Collection",
-  });
+  const [backInfo, setBackInfo] = useState({ href: "/catalogue", label: "Back to the collection" });
 
   useEffect(() => {
-    // Contextual back button logic
-    if (typeof window !== "undefined") {
-      const lastPath = sessionStorage.getItem("lastCollectionPath");
-
-      if (lastPath) {
-        requestAnimationFrame(() => {
-          if (lastPath.includes("/catalogue")) {
-            setBackInfo((prev) => ({
-              ...prev,
-              href: "/catalogue",
-              label: "Back to Catalogue",
-            }));
-          } else if (lastPath.includes("/category/")) {
-            setBackInfo((prev) => ({
-              ...prev,
-              href: lastPath,
-              label: "Back to Category",
-            }));
-          }
-        });
-      }
+    // Contextual back link: return to the category the visitor came from
+    const lastPath = sessionStorage.getItem("lastCollectionPath");
+    if (lastPath?.includes("/category/")) {
+      const slug = lastPath.split("/category/")[1];
+      const title = categoryMap[slug]?.title;
+      requestAnimationFrame(() =>
+        setBackInfo({ href: lastPath, label: title ? `Back to ${title}` : "Back to the collection" }),
+      );
     }
   }, []);
 
-  const [shared, setShared] = useState(false);
+  const { name: rawName, description, theme, images, instagramLink, price } = product;
+  const name = rawName.trim();
+  const blocks = parseDescription(description);
 
+  const [shared, setShared] = useState(false);
   const handleShare = useCallback(async () => {
     const url = window.location.href;
-    const text = `Check out ${product.name} from Lovique Studio!`;
-
     if (navigator.share) {
       try {
-        await navigator.share({ title: product.name, text, url });
+        await navigator.share({ title: name, text: `${name} from Lovique Studio`, url });
         return;
       } catch {
         // User cancelled or share failed, fall through to clipboard
       }
     }
-
-    await navigator.clipboard.writeText(url);
-    setShared(true);
-    setTimeout(() => setShared(false), 2000);
-  }, [product.name]);
-
-  const { name, description, theme, images, instagramLink, price } = product;
+    try {
+      await navigator.clipboard.writeText(url);
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    } catch {
+      // Clipboard blocked — nothing sensible left to do
+    }
+  }, [name]);
 
   // Enquire: Instagram DMs can't be prefilled, so copy a ready-made message
   // (product + link) to the clipboard while the link opens the DM thread.
-  const [enquireCopied, setEnquireCopied] = useState(false);
+  // If copying fails, show the message so it can be copied by hand.
+  const [enquire, setEnquire] = useState<{ state: "idle" | "copied" | "failed"; message: string }>({
+    state: "idle",
+    message: "",
+  });
   const handleEnquire = useCallback(() => {
     const message = `Hi Lovique Studio! I'd love to order "${name}"${
       price ? ` (${formatPrice(price)})` : ""
     }. ${window.location.href}`;
+    const fail = () => setEnquire({ state: "failed", message });
+    if (!navigator.clipboard) return fail();
     navigator.clipboard
-      ?.writeText(message)
+      .writeText(message)
       .then(() => {
-        setEnquireCopied(true);
-        setTimeout(() => setEnquireCopied(false), 5000);
+        setEnquire({ state: "copied", message });
+        setTimeout(() => setEnquire((e) => (e.state === "copied" ? { ...e, state: "idle" } : e)), 6000);
       })
-      .catch(() => {});
+      .catch(fail);
   }, [name, price]);
 
   // Mobile sticky "Enquire" bar: visible while the main button is off-screen,
@@ -114,191 +138,154 @@ export default function ProductView({
   }, []);
   const showStickyCta = !ctaVisible && !endReached;
 
+  const priceLabel = price ? formatPrice(price) : "Price on enquiry";
+
   return (
-    <main className="relative min-h-screen w-full overflow-hidden bg-white pt-20 pb-32">
+    <main className="relative min-h-screen w-full overflow-hidden bg-white pb-24 pt-20 md:pt-24">
       <BrandBackground />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 h-full">
-        {/* Breadcrumb / Back Link */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-6 lg:mb-12 lg:mt-6"
+      <div className="relative z-10 mx-auto max-w-7xl px-5 md:px-6">
+        <Link
+          href={backInfo.href}
+          className={`${poppins.className} -ml-1 mb-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-ink-soft hover:text-brand md:mb-8`}
         >
-          <Link
-            href={backInfo.href}
-            className={`${poppins.className} inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.3em] uppercase text-gray-500 hover:text-brand transition-colors`}
-          >
-            <ChevronLeft className="w-4 h-4" /> {backInfo.label}
-          </Link>
-        </motion.div>
+          <ChevronLeft className="h-4 w-4" /> {backInfo.label}
+        </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-0 items-start">
-          {/* LEFT — Product Image Carousel */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            {/* Soft Glow behind Carousel */}
-            <div className="absolute -inset-10 bg-brand/5 blur-[60px] rounded-full pointer-events-none" />
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)] lg:gap-16">
+          {/* Photos */}
+          <div className="mx-auto w-full max-w-[560px]">
             <Carousel images={images} name={name} />
-          </motion.div>
+          </div>
 
-          {/* RIGHT — Product Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col space-y-8"
-          >
-            <div className="space-y-4 text-center lg:text-left">
+          {/* Info */}
+          <div className="flex max-w-xl flex-col">
+            <h1
+              className={`${playfair.className} text-4xl italic leading-[1.1] text-ink [text-wrap:balance] md:text-5xl lg:text-6xl`}
+            >
+              {name}
+            </h1>
+
+            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <p
+                className={`${poppins.className} ${price ? "text-2xl font-semibold text-brand md:text-3xl" : "text-lg font-medium text-ink"}`}
+              >
+                {priceLabel}
+              </p>
               {theme && (
                 <span
-                  className={`${poppins.className} inline-block bg-blush-deep text-brand text-[11px] font-bold tracking-[0.2em] uppercase px-4 py-2 rounded-full border border-brand/10`}
+                  className={`${poppins.className} rounded-full bg-blush-deep px-3 py-1 text-sm text-brand`}
                 >
                   {theme}
                 </span>
               )}
-              <h1
-                className={`${playfair.className} italic text-5xl md:text-6xl lg:text-7xl text-ink leading-tight`}
-              >
-                {name}
-              </h1>
-              {!!price && (
-                <p className={`${poppins.className} text-2xl font-medium text-brand mt-2`}>
-                  {formatPrice(price)}
-                </p>
-              )}
-              <div className="w-20 h-[1px] bg-brand/20 mx-auto lg:mx-0" />
             </div>
+            {!price && (
+              <p className={`${poppins.className} mt-1 text-sm text-gray-600`}>
+                Message us and we&apos;ll quote it for your exact design.
+              </p>
+            )}
 
-            <div
-              className={`${poppins.className} text-gray-500 leading-relaxed text-sm md:text-base font-light max-w-xl text-center lg:text-left space-y-4`}
-            >
-              {description
-                ?.replace(EMOJI_REGEX, "")
-                .trim()
-                .split("\n")
-                .map((line, idx) => {
-                  const trimmedLine = line.trim();
-                  if (!trimmedLine) return null;
-
-                  // Check if line starts with common bullet indicators
-                  if (
-                    trimmedLine.startsWith("•") ||
-                    trimmedLine.startsWith("-") ||
-                    trimmedLine.startsWith("*") ||
-                    /^[0-9]+\./.test(trimmedLine)
-                  ) {
-                    const content = trimmedLine
-                      .replace(/^[•\-\*]/, "")
-                      .replace(/^[0-9]+\./, "")
-                      .trim();
-                    return (
-                      <div
-                        key={idx}
-                        className="flex gap-3 items-start justify-center lg:justify-start"
-                      >
-                        <span className="text-brand mt-1.5 w-1.5 h-1.5 rounded-full bg-brand shrink-0" />
-                        <span className="text-left">{content}</span>
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <p key={idx} className="mb-2">
-                      {trimmedLine}
+            {blocks.length > 0 && (
+              <div className={`${poppins.className} mt-8 space-y-3 text-[15px] leading-relaxed text-gray-700 md:text-base`}>
+                {blocks.map((b, i) =>
+                  b.kind === "list" ? (
+                    <ul key={i} className="space-y-2">
+                      {b.items.map((item, j) => (
+                        <li key={j} className="flex gap-3">
+                          <span aria-hidden className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : b.kind === "label" ? (
+                    <p key={i} className="pt-2 text-sm font-semibold text-ink">
+                      {b.text}
                     </p>
-                  );
-                })}
-            </div>
+                  ) : (
+                    <p key={i}>{b.text}</p>
+                  ),
+                )}
+              </div>
+            )}
 
-            {/* Primary CTA */}
-            <div
-              ref={ctaRef}
-              className="flex flex-col gap-3 pt-4 items-center lg:items-start"
-            >
+            {/* Primary action */}
+            <div ref={ctaRef} className="mt-9">
               <a
                 href={INSTAGRAM_DM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleEnquire}
-                className="w-full sm:w-auto flex items-center justify-center gap-3 bg-brand text-white px-10 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-brand-dark transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                className={`${poppins.className} flex min-h-14 w-full items-center justify-center gap-2.5 rounded-full bg-brand px-8 text-base font-semibold text-white shadow-[0_12px_28px_-12px_rgba(212,27,118,0.65)] transition-[background-color,transform] duration-300 hover:-translate-y-0.5 hover:bg-brand-dark hover:text-white sm:w-auto`}
               >
-                <MessageCircle className="w-5 h-5" />
-                <span>Enquire to Order</span>
+                <MessageCircle className="h-5 w-5" />
+                Enquire to order
               </a>
-              <p
-                aria-live="polite"
-                className={`${poppins.className} text-xs text-gray-500 text-center lg:text-left`}
-              >
-                {enquireCopied
-                  ? "Message copied — just paste it in the Instagram chat."
-                  : "Opens a chat with the studio on Instagram."}
-              </p>
+              <div aria-live="polite" className={`${poppins.className} mt-3 text-sm text-gray-600`}>
+                {enquire.state === "copied" && "Message copied — just paste it in the Instagram chat."}
+                {enquire.state === "idle" && "Opens a chat with the studio on Instagram."}
+                {enquire.state === "failed" && (
+                  <>
+                    <p>Couldn&apos;t copy automatically — paste this in the chat:</p>
+                    <p className="mt-2 select-all rounded-xl border border-ink/10 bg-white px-4 py-3 text-ink">
+                      {enquire.message}
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
 
-            {/* Secondary Actions */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            {/* Secondary actions */}
+            <div className="mt-5 flex flex-wrap gap-3">
               {instagramLink && (
                 <a
                   href={instagramLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 bg-transparent border border-ink/10 text-ink px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white hover:border-ink transition-all"
+                  className={`${poppins.className} inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/15 px-5 text-sm font-medium text-ink transition-colors hover:border-ink hover:text-ink`}
                 >
-                  <Instagram className="w-5 h-5" />
-                  <span>View on Instagram</span>
+                  <Instagram className="h-4 w-4" />
+                  See it on Instagram
                 </a>
               )}
-
               <button
+                type="button"
                 onClick={handleShare}
-                className="flex items-center justify-center gap-3 bg-transparent border border-ink/10 text-ink px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white hover:border-ink transition-all"
+                className={`${poppins.className} inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/15 px-5 text-sm font-medium text-ink transition-colors hover:border-ink`}
               >
-                {shared ? (
-                  <>
-                    <Check className="w-5 h-5 text-emerald-500" />
-                    <span>Link Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Share2 className="w-5 h-5" />
-                    <span>Share</span>
-                  </>
-                )}
+                {shared ? <Check className="h-4 w-4 text-brand" /> : <Share2 className="h-4 w-4" />}
+                {shared ? "Link copied" : "Share"}
               </button>
             </div>
 
-            {/* Ordering note (from Terms: 4–5 days lead time, UPI advance) */}
-            <div className="flex items-start gap-3 justify-center lg:justify-start border-t border-ink/5 pt-6 max-w-xl">
-              <Clock className="w-4 h-4 mt-1 shrink-0 text-brand" />
-              <p
-                className={`${poppins.className} text-sm text-gray-600 leading-relaxed text-left`}
-              >
-                Handcrafted to order — please order 4–5 days in advance. An
-                advance UPI payment confirms your order.
-              </p>
-            </div>
-          </motion.div>
+            {testimonials.length > 0 && (
+              <div className="mt-10">
+                <KindWords testimonials={testimonials} compact />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-20 md:mt-28">
+          <HowItWorks compact />
         </div>
       </div>
 
-      {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="relative z-10 max-w-7xl mx-auto px-6 pt-24">
-          <div className="border-t border-ink/5 pt-16">
-            <h2
-              className={`${playfair.className} italic text-3xl md:text-4xl text-ink text-center mb-12`}
+        <section className="relative z-10 mx-auto mt-20 max-w-7xl px-4 md:mt-28 md:px-6">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4 px-1 md:mb-12 md:px-0">
+            <h2 className={`${playfair.className} text-3xl text-ink md:text-4xl`}>You may also love</h2>
+            <Link
+              href="/catalogue"
+              className={`${poppins.className} inline-flex min-h-11 items-center text-sm font-semibold text-ink hover:text-brand`}
             >
-              You May Also Love
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedProducts.map((item) => (
+              See the full collection
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-8 lg:grid-cols-3">
+            {relatedProducts.map((item, i) => (
+              <div key={item._id} className={i === 2 ? "hidden lg:block" : undefined}>
                 <ProductCard
-                  key={item._id}
                   slug={item.slug.current}
                   name={item.name}
                   theme={item.theme}
@@ -306,11 +293,10 @@ export default function ProductView({
                   coverUrl={item.cover?.url}
                   coverLqip={item.cover?.lqip}
                   category={item.category}
-                  instagramLink={item.instagramLink}
                   isNew={item.isNew}
                 />
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </section>
       )}
@@ -325,31 +311,25 @@ export default function ProductView({
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-md border-t border-pink-100 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] flex items-center gap-4 shadow-[0_-8px_30px_rgba(0,0,0,0.05)]"
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-4 border-t border-ink/10 bg-white/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_30px_rgba(42,27,27,0.06)] backdrop-blur-md lg:hidden"
           >
             <div className="min-w-0 flex-1">
+              <p className={`${playfair.className} truncate text-base leading-tight text-ink`}>{name}</p>
               <p
-                className={`${playfair.className} truncate text-base text-ink leading-tight`}
+                className={`${poppins.className} text-sm leading-tight ${price ? "font-semibold text-brand" : "text-gray-600"}`}
               >
-                {name}
+                {priceLabel}
               </p>
-              {!!price && (
-                <p
-                  className={`${poppins.className} text-sm font-medium text-brand leading-tight`}
-                >
-                  {formatPrice(price)}
-                </p>
-              )}
             </div>
             <a
               href={INSTAGRAM_DM_URL}
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleEnquire}
-              className="shrink-0 flex items-center gap-2 bg-brand text-white px-5 py-3 rounded-full text-[11px] font-bold tracking-[0.15em] uppercase hover:bg-brand-dark transition-colors shadow-md"
+              className={`${poppins.className} flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark hover:text-white`}
             >
-              <MessageCircle className="w-4 h-4" />
+              <MessageCircle className="h-4 w-4" />
               Enquire
             </a>
           </motion.div>

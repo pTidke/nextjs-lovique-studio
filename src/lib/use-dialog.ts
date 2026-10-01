@@ -31,9 +31,11 @@ export function useDialog(
     const focusables = () =>
       Array.from(ref.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []);
 
-    // Wait a frame so AnimatePresence has mounted the content
+    // Focus the dialog itself (it needs tabIndex={-1}), not its first control:
+    // screen readers announce it and no focus ring flashes on a link the user
+    // never chose. Tab then moves into the content. Wait a frame for AnimatePresence.
     const raf = requestAnimationFrame(() => {
-      (focusables()[0] ?? ref.current)?.focus();
+      ref.current?.focus({ preventScroll: true });
     });
 
     const onKeyDown = (e: KeyboardEvent) => {

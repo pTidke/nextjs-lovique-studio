@@ -1,6 +1,11 @@
 import { client } from "@/sanity/client";
-import type { Product, ProductSummary } from "@/sanity/types";
-import { PRODUCT_BY_SLUG, RELATED_PRODUCTS } from "@/sanity/queries";
+import type { Product, ProductSummary, Testimonial } from "@/sanity/types";
+import {
+  FEATURED_TESTIMONIALS,
+  MORE_PRODUCTS,
+  PRODUCT_BY_SLUG,
+  RELATED_PRODUCTS,
+} from "@/sanity/queries";
 import { ogImageUrl } from "@/sanity/image";
 import ProductView from "@/components/product-view";
 import { notFound } from "next/navigation";
@@ -66,12 +71,25 @@ export default async function ProductPage({
     notFound();
   }
 
-  const relatedProducts = product.category
-    ? await client.fetch<ProductSummary[]>(RELATED_PRODUCTS, {
-        category: product.category,
-        slug,
-      })
-    : [];
+  const [sameCategory, testimonials] = await Promise.all([
+    product.category
+      ? client.fetch<ProductSummary[]>(RELATED_PRODUCTS, { category: product.category, slug })
+      : Promise.resolve([] as ProductSummary[]),
+    client.fetch<Testimonial[]>(FEATURED_TESTIMONIALS),
+  ]);
+
+  // Small categories would end the page in a dead end — top up with recent pieces
+  const relatedProducts =
+    sameCategory.length >= 3
+      ? sameCategory
+      : [
+          ...sameCategory,
+          ...(await client.fetch<ProductSummary[]>(MORE_PRODUCTS, {
+            slug,
+            exclude: sameCategory.map((p) => p._id),
+            limit: 3 - sameCategory.length,
+          })),
+        ];
 
   const url = `${SITE_URL}/product/${slug}`;
   // Structured data so search engines understand the product (and its INR price)
@@ -106,7 +124,11 @@ export default async function ProductPage({
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <ProductView product={product} relatedProducts={relatedProducts} />
+      <ProductView
+        product={product}
+        relatedProducts={relatedProducts}
+        testimonials={testimonials.slice(0, 1)}
+      />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { Flower2 } from "lucide-react";
 import SanityImage from "@/components/sanity-image";
 import { playfair, poppins } from "@/lib/fonts";
-import { Instagram } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { categoryMap } from "@/lib/categories";
 
@@ -12,9 +12,14 @@ type Props = {
   price?: number;
   coverUrl?: string;
   coverLqip?: string;
-  instagramLink?: string;
   category?: string;
   isNew?: boolean;
+  /** Hide the category label (e.g. on that category's own page) */
+  showCategory?: boolean;
+  /** h2 when cards sit directly under the page h1, h3 inside a titled section */
+  headingLevel?: 2 | 3;
+  /** Next/Image sizes hint for the grid this card sits in */
+  sizes?: string;
 };
 
 export function ProductCard({
@@ -24,91 +29,73 @@ export function ProductCard({
   price,
   coverUrl,
   coverLqip,
-  instagramLink,
   category,
   isNew,
+  showCategory = true,
+  headingLevel = 3,
+  sizes = "(max-width: 1024px) 50vw, 33vw",
 }: Props) {
+  const Heading = headingLevel === 2 ? "h2" : "h3";
+  const categoryLabel = category ? categoryMap[category]?.label || category : null;
+
   return (
     // Whole card is clickable via the title link's ::after overlay, so it is a
     // real <a>: works with keyboard, middle-click / open in new tab, and prefetch.
-    <article className="group block overflow-hidden rounded-[1.5rem] bg-blush bg-gradient-to-b from-white via-blush-deep to-blush shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] transition-all duration-500 relative has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-brand has-[a:focus-visible]:ring-offset-2">
-      {/* Gaussian Glow Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(238,43,140,0.05)_0%,_transparent_50%)] pointer-events-none" />
-
-      {/* Image Area */}
-      <div className="relative aspect-[3/4] w-full bg-blush overflow-hidden rounded-t-[1.5rem]">
-        {/* Main Image with Studio Styling */}
+    <article className="group relative flex flex-col rounded-2xl has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-4 has-[a:focus-visible]:outline-brand">
+      {/* Photo */}
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-blush-deep">
         {coverUrl ? (
           <SanityImage
             src={coverUrl}
             lqip={coverLqip}
-            alt={name}
+            alt={name.trim()}
             fill
-            className="object-cover object-center transition-transform duration-700 group-hover:scale-105 opacity-[0.98] mix-blend-multiply"
-            sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
+            sizes={sizes}
+            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-rose-50 text-rose-400">
-            No image
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-brand/70">
+            <Flower2 className="h-8 w-8" strokeWidth={1.25} />
+            <span className={`${poppins.className} text-xs`}>Photo coming soon</span>
           </div>
         )}
 
-        {/* Studio Refinements: Light unification & Depth */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-brand/5 to-transparent pointer-events-none" />
-        <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.03)] pointer-events-none" />
-
-        {/* Instagram Icon Overlay — sits above the card link */}
-        <a
-          href={instagramLink || "https://instagram.com/lovique._studio"}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`View ${name} on Instagram`}
-          className="absolute top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-all duration-300 z-20 text-gray-500 hover:text-brand md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:focus-visible:opacity-100 md:focus-visible:translate-y-0"
-        >
-          <Instagram className="w-5 h-5" />
-        </a>
-
-        {/* NEW Badge - Refined with glow */}
         {isNew && (
-          <div className="absolute top-6 left-6 z-20 pointer-events-none">
-            <div className="relative bg-brand text-white text-[11px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm backdrop-blur-sm border border-white/20">
-              New
-            </div>
-          </div>
-        )}
-
-        {/* Category Pill - Bottom Right */}
-        {category && (
-          <div className="absolute bottom-6 right-6 z-20 pointer-events-none">
-            <div className="bg-white/40 backdrop-blur-md text-ink text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-white/30 shadow-sm">
-              {categoryMap[category]?.label || category}
-            </div>
-          </div>
+          <span
+            className={`${poppins.className} pointer-events-none absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-brand shadow-[0_2px_8px_rgba(42,27,27,0.08)] md:left-4 md:top-4`}
+          >
+            New
+          </span>
         )}
       </div>
 
-      {/* Info Area */}
-      <div className="p-4 space-y-1">
-        <h3
-          className={`${playfair.className} text-xl md:text-2xl font-bold text-ink leading-tight`}
-        >
+      {/* Info */}
+      <div className="flex flex-1 flex-col gap-1 px-1 pt-3 md:pt-4">
+        {showCategory && categoryLabel && (
+          <p
+            className={`${poppins.className} text-[11px] font-medium uppercase leading-none tracking-[0.14em] text-ink-soft/80`}
+          >
+            {categoryLabel}
+          </p>
+        )}
+        <Heading className={`${playfair.className} text-lg leading-snug text-ink md:text-2xl`}>
           <Link
             href={`/product/${slug}`}
             className="hover:text-ink focus-visible:outline-none after:absolute after:inset-0 after:z-10 after:content-['']"
           >
-            {name}
+            {name.trim()}
           </Link>
-        </h3>
-        {!!price && (
-          <p className={`${poppins.className} text-lg font-medium text-brand`}>
-            {formatPrice(price)}
+        </Heading>
+        <p
+          className={`${poppins.className} text-sm font-medium leading-snug ${price ? "text-brand md:text-base" : "text-ink-soft/80"}`}
+        >
+          {price ? formatPrice(price) : "Price on enquiry"}
+        </p>
+        {theme && (
+          <p className={`${poppins.className} line-clamp-2 text-xs leading-relaxed text-gray-500 md:text-sm`}>
+            {theme}
           </p>
         )}
-        <p
-          className={`${poppins.className} text-sm text-gray-500 leading-relaxed line-clamp-3`}
-        >
-          {theme || "Lovique Studio Special"}
-        </p>
       </div>
     </article>
   );
