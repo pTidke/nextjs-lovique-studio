@@ -154,6 +154,11 @@ export default function SignatureCollection({
                 >
                   {product.name}
                 </h3>
+                {product.price && (
+                  <p className={`${poppins.className} text-lg font-medium text-[#ee2b8c]`}>
+                    ₹{product.price}
+                  </p>
+                )}
                 <p
                   className={`${poppins.className} text-sm text-gray-500 leading-relaxed line-clamp-3`}
                 >

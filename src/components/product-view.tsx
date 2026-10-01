@@ -3,7 +3,7 @@
 import { Playfair_Display, Poppins } from "next/font/google";
 import Image from "next/image";
 import Carousel from "@/components/carousel";
-import { MessageCircle, Instagram, ChevronLeft, Share2, Check } from "lucide-react";
+import { Instagram, ChevronLeft, Share2, Check } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -34,6 +34,7 @@ type RelatedProduct = {
   theme?: string;
   slug: { current: string };
   cover?: { url?: string };
+  price?: number;
   category?: string;
   isNew?: boolean;
   instagramLink?: string;
@@ -43,6 +44,7 @@ type Product = {
   name: string;
   description: string;
   theme: string;
+  price?: number;
   images: ProductImage[];
   whatsappLink?: string;
   instagramLink?: string;
@@ -106,7 +108,7 @@ export default function ProductView({
     setTimeout(() => setShared(false), 2000);
   }, [product.name]);
 
-  const { name, description, theme, images, instagramLink } = product;
+  const { name, description, theme, images, instagramLink, price } = product;
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-white pt-20 pb-32">
@@ -160,6 +162,11 @@ export default function ProductView({
               >
                 {name}
               </h1>
+              {price && (
+                <p className={`${poppins.className} text-2xl font-medium text-[#ee2b8c] mt-2`}>
+                  ₹{price}
+                </p>
+              )}
               <div className="w-20 h-[1px] bg-[#ee2b8c]/20 mx-auto lg:mx-0" />
             </div>
 
@@ -209,20 +216,6 @@ export default function ProductView({
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-              <a
-                href={`https://wa.me/917016171941?text=${encodeURIComponent(
-                  `Hi Lovique Studio! \n\nI'm interested in your *${name}* bouquet.\n\nHere’s the Instagram link: ${
-                    instagramLink || "https://instagram.com/lovique.studio"
-                  }\n\nCould you please share more details?`,
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative flex items-center justify-center gap-3 bg-transparent border border-emerald-500/20 text-[#2a1b1b] px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-emerald-50 hover:border-emerald-500 transition-all shadow-sm"
-              >
-                <MessageCircle className="w-5 h-5 text-emerald-500" />
-                <span>Enquire on WhatsApp</span>
-              </a>
-
               {instagramLink && (
                 <a
                   href={instagramLink}
@@ -251,30 +244,6 @@ export default function ProductView({
                   </>
                 )}
               </button>
-            </div>
-
-            {/* Features (Mini Version) */}
-            <div className="pt-12 grid grid-cols-2 gap-8 border-t border-[#2a1b1b]/5">
-              <div className="space-y-2">
-                <p
-                  className={`${poppins.className} text-[10px] font-bold tracking-[0.2em] uppercase text-[#ee2b8c]`}
-                >
-                  Curation
-                </p>
-                <p className="text-xs text-gray-400 font-light">
-                  Handcrafted forever flowers
-                </p>
-              </div>
-              <div className="space-y-2">
-                <p
-                  className={`${poppins.className} text-[10px] font-bold tracking-[0.2em] uppercase text-[#ee2b8c]`}
-                >
-                  Packaging
-                </p>
-                <p className="text-xs text-gray-400 font-light">
-                  Premium tailored packaging
-                </p>
-              </div>
             </div>
           </motion.div>
         </div>
@@ -317,6 +286,11 @@ export default function ProductView({
                     >
                       {item.name}
                     </h3>
+                    {item.price && (
+                      <p className={`${poppins.className} text-lg font-medium text-[#ee2b8c]`}>
+                        ₹{item.price}
+                      </p>
+                    )}
                     <p
                       className={`${poppins.className} text-sm text-gray-500 leading-relaxed`}
                     >

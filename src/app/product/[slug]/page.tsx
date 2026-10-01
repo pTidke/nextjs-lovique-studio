@@ -6,7 +6,7 @@ import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 60;
+export const revalidate = 0;
 
 async function getProduct(slug: string) {
   return client.fetch(PRODUCT_BY_SLUG, { slug });

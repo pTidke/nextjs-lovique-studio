@@ -109,6 +109,7 @@ export default async function CategoryPage({
                 slug={product.slug.current}
                 name={product.name}
                 theme={product.theme}
+                price={product.price}
                 coverUrl={product.cover?.url}
                 category={product.category}
                 instagramLink={product.instagramLink}

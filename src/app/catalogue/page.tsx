@@ -22,7 +22,7 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600"],
 });
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function CataloguePage() {
   const products = await client.fetch(PRODUCTS_GRID);
@@ -73,6 +73,7 @@ export default async function CataloguePage() {
               slug={product.slug.current}
               name={product.name}
               theme={product.theme}
+              price={product.price}
               coverUrl={product.cover?.url}
               category={product.category}
               instagramLink={product.instagramLink}

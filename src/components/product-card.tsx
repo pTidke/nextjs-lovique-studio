@@ -28,6 +28,7 @@ type Props = {
   slug: string;
   name: string;
   theme?: string;
+  price?: number;
   coverUrl?: string;
   instagramLink?: string;
   category?: string;
@@ -38,6 +39,7 @@ export function ProductCard({
   slug,
   name,
   theme,
+  price,
   coverUrl,
   instagramLink,
   category,
@@ -124,6 +126,11 @@ export function ProductCard({
         >
           {name}
         </h3>
+        {price && (
+          <p className={`${poppins.className} text-lg font-medium text-[#ee2b8c]`}>
+            ₹{price}
+          </p>
+        )}
         <p
           className={`${poppins.className} text-sm text-gray-500 leading-relaxed line-clamp-3`}
         >

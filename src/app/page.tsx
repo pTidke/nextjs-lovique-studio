@@ -4,7 +4,7 @@ import HeroSection from "@/components/hero-section";
 import FeaturesSection from "@/components/features-section";
 import SignatureCollection from "@/components/signature-collection";
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function HomePage() {
   const products = await client.fetch(PRODUCTS_GRID);

@@ -6,7 +6,6 @@ import Footer from "@/components/footer";
 import GlobalPetals from "@/components/global-petals"; // client-only petals wrapper
 import ScrollReset from "@/components/scroll-reset";
 import NavigationTracker from "@/components/navigation-tracker";
-import WhatsAppFAB from "@/components/whatsapp-fab";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -49,9 +48,6 @@ export default function RootLayout({
 
         {/* Footer */}
         <Footer />
-
-        {/* Floating WhatsApp Button */}
-        <WhatsAppFAB />
       </body>
     </html>
   );
