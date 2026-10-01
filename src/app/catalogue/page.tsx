@@ -36,7 +36,7 @@ export default async function CataloguePage() {
       <section className="relative z-10 pt-40 pb-20 px-6">
         <div className="max-w-7xl mx-auto text-center space-y-2">
           <span
-            className={`${poppins.className} text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+            className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
           >
             Explore Our Studio
           </span>
@@ -76,7 +76,7 @@ export default async function CataloguePage() {
         {products.length === 0 && (
           <div className="text-center py-40">
             <p
-              className={`${playfair.className} text-2xl text-gray-400 italic`}
+              className={`${playfair.className} text-2xl text-gray-500 italic`}
             >
               The studio is currently preparing new arrangements...
             </p>

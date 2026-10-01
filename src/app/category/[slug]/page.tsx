@@ -92,7 +92,7 @@ export default async function CategoryPage({
       <section className="relative z-10 pt-32 md:pt-40 px-6 text-center">
         <div className="max-w-4xl mx-auto space-y-2">
           <span
-            className={`${poppins.className} text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+            className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
           >
             Category
           </span>
@@ -130,7 +130,7 @@ export default async function CategoryPage({
           </div>
         ) : (
           <div className="text-center py-20">
-            <p className={`${poppins.className} text-gray-400`}>
+            <p className={`${poppins.className} text-gray-500`}>
               No products found in this category yet.
             </p>
           </div>

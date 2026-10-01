@@ -5,60 +5,54 @@
    Lovique Studio Global Styles
 --------------------------------*/
 
-/* ✨ Global Base */
-html,
-body {
-  scroll-behavior: smooth;
-  color: #333;
-  font-smooth: always;
-  -webkit-font-smoothing: antialiased;
-}
+/* Element defaults live in @layer base so Tailwind utility classes
+   (text-*, leading-*, hover:*) always win over them. */
+@layer base {
+  /* ✨ Global Base */
+  html,
+  body {
+    scroll-behavior: smooth;
+    color: #333;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+  }
 
-/* --font-sans / --font-serif come from next/font (src/lib/fonts.ts) on <body> */
-body {
-  font-family: var(--font-sans), sans-serif;
-}
+  /* --font-sans / --font-serif come from next/font (src/lib/fonts.ts) on <body> */
+  body {
+    font-family: var(--font-sans), sans-serif;
+  }
 
-/* 🩷 Typography tweaks */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-serif), serif;
-  color: #111827;
-}
+  /* 🩷 Typography tweaks */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif), serif;
+    color: #111827;
+  }
 
-p {
-  font-family: var(--font-sans), sans-serif;
-  line-height: 1.75;
-  color: #374151;
-}
+  p {
+    font-family: var(--font-sans), sans-serif;
+    line-height: 1.75;
+    color: #374151;
+  }
 
-/* 🌷 Links */
-a {
-  text-decoration: none;
-  transition: color 0.25s ease;
-}
+  /* 🌷 Links */
+  a {
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
 
-a:hover {
-  color: black;
-}
+  a:hover {
+    color: black;
+  }
 
-/* 🌼 Scrollbar Styling - Hidden */
-html {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
-/* 🌬️ Section spacing */
-section {
-  scroll-margin-top: 100px; /* prevents header overlap on anchor links */
+  /* 🌬️ Section spacing */
+  section {
+    scroll-margin-top: 100px; /* prevents header overlap on anchor links */
+  }
 }
 
 /* 🩰 Fade-ins */

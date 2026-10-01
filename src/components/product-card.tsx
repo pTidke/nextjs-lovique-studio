@@ -1,9 +1,7 @@
-"use client";
-
+import Link from "next/link";
 import SanityImage from "@/components/sanity-image";
 import { playfair, poppins } from "@/lib/fonts";
 import { Instagram } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { formatPrice } from "@/lib/utils";
 
 type Props = {
@@ -18,6 +16,15 @@ type Props = {
   isNew?: boolean;
 };
 
+const categoryDisplayMap: Record<string, string> = {
+  singles: "Singles",
+  flower_basket: "Flower Basket",
+  bouquets: "Bouquet",
+  flower_pots: "Flower pot",
+  magazine: "Magazine",
+  wall_art: "Wall Art",
+};
+
 export function ProductCard({
   slug,
   name,
@@ -29,22 +36,10 @@ export function ProductCard({
   category,
   isNew,
 }: Props) {
-  const router = useRouter();
-
-  const categoryDisplayMap: Record<string, string> = {
-    singles: "Singles",
-    flower_basket: "Flower Basket",
-    bouquets: "Bouquet",
-    flower_pots: "Flower pot",
-    magazine: "Magazine",
-    wall_art: "Wall Art",
-  };
-
   return (
-    <div
-      onClick={() => router.push(`/product/${slug}`)}
-      className="group block overflow-hidden rounded-[1.5rem] bg-[#fffafa] bg-gradient-to-b from-white via-[#fff5f8] to-[#fffafa] shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] transition-all duration-500 relative cursor-pointer"
-    >
+    // Whole card is clickable via the title link's ::after overlay, so it is a
+    // real <a>: works with keyboard, middle-click / open in new tab, and prefetch.
+    <article className="group block overflow-hidden rounded-[1.5rem] bg-[#fffafa] bg-gradient-to-b from-white via-[#fff5f8] to-[#fffafa] shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] transition-all duration-500 relative has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-[#ee2b8c] has-[a:focus-visible]:ring-offset-2">
       {/* Gaussian Glow Background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(238,43,140,0.05)_0%,_transparent_50%)] pointer-events-none" />
 
@@ -61,7 +56,7 @@ export function ProductCard({
             sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-rose-50 text-gray-400">
+          <div className="w-full h-full flex items-center justify-center bg-rose-50 text-rose-400">
             No image
           </div>
         )}
@@ -70,25 +65,21 @@ export function ProductCard({
         <div className="absolute inset-0 bg-gradient-to-tr from-[#ee2b8c]/5 to-transparent pointer-events-none" />
         <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.03)] pointer-events-none" />
 
-        {/* Instagram Icon Overlay */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            window.open(
-              instagramLink || "https://instagram.com/lovique._studio",
-              "_blank",
-              "noopener,noreferrer",
-            );
-          }}
-          className="absolute top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-all duration-300 z-10 text-gray-400 hover:text-[#ee2b8c] md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0"
+        {/* Instagram Icon Overlay — sits above the card link */}
+        <a
+          href={instagramLink || "https://instagram.com/lovique._studio"}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`View ${name} on Instagram`}
+          className="absolute top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-all duration-300 z-20 text-gray-500 hover:text-[#ee2b8c] md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:focus-visible:opacity-100 md:focus-visible:translate-y-0"
         >
           <Instagram className="w-5 h-5" />
-        </button>
+        </a>
 
         {/* NEW Badge - Refined with glow */}
         {isNew && (
-          <div className="absolute top-6 left-6 z-20">
-            <div className="relative bg-[#ee2b8c] text-white text-[9px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm backdrop-blur-sm border border-white/20">
+          <div className="absolute top-6 left-6 z-20 pointer-events-none">
+            <div className="relative bg-[#ee2b8c] text-white text-[11px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm backdrop-blur-sm border border-white/20">
               New
             </div>
           </div>
@@ -96,8 +87,8 @@ export function ProductCard({
 
         {/* Category Pill - Bottom Right */}
         {category && (
-          <div className="absolute bottom-6 right-6 z-20">
-            <div className="bg-white/40 backdrop-blur-md text-[#2a1b1b] text-[8px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-white/30 shadow-sm">
+          <div className="absolute bottom-6 right-6 z-20 pointer-events-none">
+            <div className="bg-white/40 backdrop-blur-md text-[#2a1b1b] text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-white/30 shadow-sm">
               {categoryDisplayMap[category] || category}
             </div>
           </div>
@@ -109,7 +100,12 @@ export function ProductCard({
         <h3
           className={`${playfair.className} text-xl md:text-2xl font-bold text-[#2a1b1b] leading-tight`}
         >
-          {name}
+          <Link
+            href={`/product/${slug}`}
+            className="hover:text-[#2a1b1b] focus-visible:outline-none after:absolute after:inset-0 after:z-10 after:content-['']"
+          >
+            {name}
+          </Link>
         </h3>
         {!!price && (
           <p className={`${poppins.className} text-lg font-medium text-[#ee2b8c]`}>
@@ -122,6 +118,6 @@ export function ProductCard({
           {theme || "Lovique Studio Special"}
         </p>
       </div>
-    </div>
+    </article>
   );
 }

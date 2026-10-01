@@ -3,26 +3,21 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useId, useCallback } from "react";
 import { Instagram, Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useDialog } from "@/lib/use-dialog";
 
 export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  /* Lock body scroll when menu is open */
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [menuOpen]);
+  /* Mobile menu: Escape closes, body scroll locked, focus moves into menu.
+     No focus trap — the close (X) toggle lives in the header outside the overlay. */
+  const menuRef = useRef<HTMLDivElement>(null);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  useDialog(menuRef, menuOpen, closeMenu, { trapFocus: false });
 
   /* Scroll detection */
   useEffect(() => {
@@ -105,6 +100,7 @@ export default function Header() {
               href="https://instagram.com/lovique._studio"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Lovique Studio on Instagram"
               className="hover:text-pink-500 transition"
             >
               <Instagram className="w-5 h-5" />
@@ -115,7 +111,9 @@ export default function Header() {
           <button
             className="md:hidden z-50 text-gray-900 p-2 -mr-2 transition-colors hover:text-pink-600"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle Menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
           >
             {menuOpen ? (
               <X className="w-6 h-6" />
@@ -130,6 +128,8 @@ export default function Header() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            ref={menuRef}
+            id="mobile-menu"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -147,14 +147,14 @@ export default function Header() {
             {/* Mobile Footer Actions */}
             <div className="mt-auto flex flex-col gap-4 items-center border-t border-gray-100 pt-8">
               <div className="flex gap-10 text-gray-500">
-                {/* <button className="flex flex-col items-center gap-1 text-[10px] uppercase tracking-widest hover:text-pink-600 transition">
+                {/* <button className="flex flex-col items-center gap-1 text-[11px] uppercase tracking-widest hover:text-pink-600 transition">
                   <Search className="w-5 h-5 mb-1" /> Search
                 </button> */}
                 <Link
                   href="https://instagram.com/lovique._studio"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1 text-[10px] uppercase tracking-widest hover:text-pink-600 transition"
+                  className="flex flex-col items-center gap-1 text-[11px] uppercase tracking-widest hover:text-pink-600 transition"
                 >
                   <Instagram className="w-5 h-5 mb-1" /> Instagram
                 </Link>
@@ -179,6 +179,8 @@ function NavLinks({
   isMobile?: boolean;
 }) {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const categoriesButtonRef = useRef<HTMLButtonElement>(null);
+  const categoriesId = useId();
   const categories = [
     { title: "Singles", value: "singles" },
     { title: "Flower basket", value: "flower_basket" },
@@ -210,21 +212,39 @@ function NavLinks({
         className={`relative flex flex-col items-center ${isMobile ? "w-full" : ""}`}
         onMouseEnter={() => !isMobile && setCategoriesOpen(true)}
         onMouseLeave={() => !isMobile && setCategoriesOpen(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Escape" && categoriesOpen) {
+            e.stopPropagation();
+            setCategoriesOpen(false);
+            categoriesButtonRef.current?.focus();
+          }
+        }}
+        onBlur={(e) => {
+          // Desktop: close once keyboard focus leaves the dropdown
+          if (!isMobile && !e.currentTarget.contains(e.relatedTarget as Node)) {
+            setCategoriesOpen(false);
+          }
+        }}
       >
         <button
-          onClick={() => isMobile && setCategoriesOpen(!categoriesOpen)}
+          ref={categoriesButtonRef}
+          // Desktop opens on hover; click/Enter opens it for keyboard & touch users
+          onClick={() => setCategoriesOpen((open) => (isMobile ? !open : true))}
+          aria-expanded={categoriesOpen}
+          aria-controls={categoriesId}
           className={`${baseLinkStyle} flex items-center justify-center gap-2`}
         >
           Categories
           <ChevronDown
-            className={`transition-transform duration-300 ${categoriesOpen ? "rotate-180" : ""} ${isMobile ? "w-4 h-4 text-gray-400" : "w-3 h-3"}`}
+            className={`transition-transform duration-300 ${categoriesOpen ? "rotate-180" : ""} ${isMobile ? "w-4 h-4 text-gray-500" : "w-3 h-3"}`}
           />
         </button>
 
         {/* Dropdown Content */}
         <AnimatePresence>
-          {(categoriesOpen || (!isMobile && categoriesOpen)) && (
+          {categoriesOpen && (
             <motion.div
+              id={categoriesId}
               initial={
                 isMobile ? { height: 0, opacity: 0 } : { opacity: 0, y: 10 }
               }
@@ -256,7 +276,7 @@ function NavLinks({
                       block hover:text-pink-600 transition
                       ${
                         isMobile
-                          ? "text-[10px] tracking-[0.2em] uppercase text-gray-500 py-2" // Smaller text in dropdown
+                          ? "text-[11px] tracking-[0.2em] uppercase text-gray-500 py-2" // Smaller text in dropdown
                           : "text-[11px] tracking-widest uppercase text-gray-600 px-4 py-2"
                       }
                     `}

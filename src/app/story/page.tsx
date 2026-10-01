@@ -16,7 +16,7 @@ export default function StoryPage() {
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center space-y-8">
           <div className="space-y-4">
             <span
-              className={`${poppins.className} text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
             >
               Est. 2025
             </span>
@@ -64,7 +64,7 @@ export default function StoryPage() {
           </h2>
           <div className="space-y-6">
             <p
-              className={`${poppins.className} text-sm md:text-base text-gray-400 leading-relaxed font-light`}
+              className={`${poppins.className} text-sm md:text-base text-gray-500 leading-relaxed font-light`}
             >
               {
                 "Lovique Studio was born on 7th September, founded by a passionate young artist with a simple yet powerful idea—to let love last forever. What began as a creative dream soon transformed into a space where emotions are preserved through forever flowers. Each piece is thoughtfully handcrafted, not just as a bouquet, but as a symbol of timeless love, memories, and moments that deserve to never fade. At Lovique Studio, we don’t just create flowers—we help people feel love, forever."
@@ -88,7 +88,7 @@ export default function StoryPage() {
             Creativity behind our Flowers
           </h2>
           <ul
-            className={`${poppins.className} text-sm md:text-base text-gray-400 leading-relaxed font-light space-y-3 list-none`}
+            className={`${poppins.className} text-sm md:text-base text-gray-500 leading-relaxed font-light space-y-3 list-none`}
           >
             <li className="flex items-start gap-3">
               <span className="text-[#ee2b8c] mt-1.5 text-[6px]">●</span>

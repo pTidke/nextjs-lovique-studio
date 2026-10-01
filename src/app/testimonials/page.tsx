@@ -30,7 +30,7 @@ export default async function TestimonialsPage() {
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center space-y-8 animate-[fade-up_0.7s_ease-out_forwards]">
           <div className="space-y-4">
             <span
-              className={`${poppins.className} text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
             >
               Customer Stories
             </span>
@@ -75,7 +75,7 @@ export default async function TestimonialsPage() {
                       />
                     </div>
                   ) : (
-                    <div className="relative w-full h-full rounded-full bg-white border border-pink-50 flex items-center justify-center text-pink-200">
+                    <div className="relative w-full h-full rounded-full bg-white border border-pink-50 flex items-center justify-center text-pink-400">
                       <span className={`${playfair.className} text-3xl`}>
                         {t.name.charAt(0)}
                       </span>
@@ -110,7 +110,7 @@ export default async function TestimonialsPage() {
                       {t.name}
                     </h3>
                     <p
-                      className={`${poppins.className} text-[9px] md:text-[10px] font-bold tracking-[0.2em] uppercase text-gray-300`}
+                      className={`${poppins.className} text-[11px] md:text-[11px] font-bold tracking-[0.2em] uppercase text-gray-500`}
                     >
                       {new Date(t.date).toLocaleDateString("en-US", {
                         year: "numeric",
@@ -123,7 +123,7 @@ export default async function TestimonialsPage() {
             ))
           ) : (
             <div className="col-span-full py-20 text-center">
-              <p className={`${poppins.className} text-gray-400`}>
+              <p className={`${poppins.className} text-gray-500`}>
                 No testimonials yet — your story could be the first 🌸
               </p>
             </div>

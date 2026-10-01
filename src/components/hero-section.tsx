@@ -5,7 +5,7 @@ import AmbientBlob from "@/components/ambient-blob";
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full h-screen min-h-[600px] flex flex-col items-center justify-center overflow-hidden bg-white">
+    <section className="relative w-full h-svh min-h-[600px] flex flex-col items-center justify-center overflow-hidden bg-white">
       {/* 🌸 Animated Blobs Layer */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {/* Blob 1: Accent Pink (Top Left) */}
@@ -108,10 +108,10 @@ export default function HeroSection() {
 
       {/* Bottom Indicator */}
       <div className="absolute bottom-12 flex flex-col items-center gap-2 animate-bounce opacity-60 z-10">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-gray-500 font-medium">
+        <span className="text-[11px] tracking-[0.3em] uppercase text-gray-500 font-medium">
           Discover
         </span>
-        <ChevronDown className="w-4 h-4 text-gray-400" />
+        <ChevronDown className="w-4 h-4 text-gray-500" />
       </div>
     </section>
   );

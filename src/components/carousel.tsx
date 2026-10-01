@@ -3,7 +3,8 @@
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import SanityImage from "@/components/sanity-image";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
+import { useDialog } from "@/lib/use-dialog";
 import { urlFor } from "@/sanity/image";
 import { X, ZoomIn } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -65,6 +66,26 @@ export default function Carousel({
 
   const scrollTo = (index: number) => emblaApi?.scrollTo(index);
 
+  const lightboxRef = useRef<HTMLDivElement>(null);
+  const closeLightbox = useCallback(() => setLightboxOpen(false), []);
+  useDialog(lightboxRef, lightboxOpen, closeLightbox);
+
+  // Pause autoplay behind the lightbox; arrow keys page through images
+  useEffect(() => {
+    const autoplayPlugin = emblaApi?.plugins()?.autoplay;
+    if (!lightboxOpen) {
+      autoplayPlugin?.play();
+      return;
+    }
+    autoplayPlugin?.stop();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") emblaApi?.scrollPrev();
+      if (e.key === "ArrowRight") emblaApi?.scrollNext();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [lightboxOpen, emblaApi]);
+
   if (images.length === 0) {
     return (
       <div className="w-full max-w-[480px] lg:max-w-[560px] aspect-[6/8] rounded-2xl border border-pink-100 bg-rose-50 flex items-center justify-center text-rose-400">
@@ -88,8 +109,7 @@ export default function Carousel({
             return (
               <div
                 key={idx}
-                onClick={() => setLightboxOpen(true)}
-                className={`flex-[0_0_100%] relative aspect-[6/8] transition-opacity duration-1000 cursor-zoom-in ${
+                className={`flex-[0_0_100%] relative aspect-[6/8] transition-opacity duration-1000 ${
                   idx === selectedIndex ? "opacity-100 z-10" : "opacity-0 z-0"
                 }`}
               >
@@ -101,6 +121,13 @@ export default function Carousel({
                   sizes="(min-width: 1024px) 560px, (min-width: 528px) 480px, 100vw"
                   className="object-cover object-center rounded-2xl"
                   priority={idx === 0}
+                />
+                <button
+                  type="button"
+                  onClick={() => setLightboxOpen(true)}
+                  tabIndex={idx === selectedIndex ? 0 : -1}
+                  aria-label={`View image ${idx + 1} of ${images.length} full screen`}
+                  className="absolute inset-0 cursor-zoom-in rounded-2xl focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[#ee2b8c]"
                 />
               </div>
             );
@@ -180,6 +207,10 @@ export default function Carousel({
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
+            ref={lightboxRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${name} images`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

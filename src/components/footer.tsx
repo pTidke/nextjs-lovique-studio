@@ -121,7 +121,7 @@ export default function Footer() {
             <div className="w-full lg:w-1/2 space-y-8 text-center lg:text-left">
               <div className="space-y-4">
                 <span
-                  className={`${poppins.className} text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+                  className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
                 >
                   Luxury Minimalism
                 </span>
@@ -133,7 +133,7 @@ export default function Footer() {
               </div>
 
               <p
-                className={`${poppins.className} text-sm md:text-base text-gray-400 leading-relaxed max-w-lg mx-auto lg:mx-0`}
+                className={`${poppins.className} text-sm md:text-base text-gray-500 leading-relaxed max-w-lg mx-auto lg:mx-0`}
               >
                 Our studio specializes in monochromatic palettes and soft
                 textures. We believe that simplicity is the ultimate form of
@@ -143,7 +143,7 @@ export default function Footer() {
 
               <Link
                 href="/story"
-                className="bg-[#4a3f3f] text-white px-10 py-4 rounded-full text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase transition-all shadow-md hover:shadow-lg hover:text-white"
+                className="bg-[#4a3f3f] text-white px-10 py-4 rounded-full text-[11px] md:text-xs font-bold tracking-[0.2em] uppercase transition-all shadow-md hover:shadow-lg hover:text-white"
               >
                 Learn More
               </Link>
@@ -161,7 +161,7 @@ export default function Footer() {
             Lovique Studio
           </h3>
           <p
-            className={`${poppins.className} text-xs md:text-sm text-gray-400 leading-relaxed`}
+            className={`${poppins.className} text-xs md:text-sm text-gray-500 leading-relaxed`}
           >
             A minimalist studio for high end floristry{" "}
             <br className="hidden md:block" />
@@ -175,7 +175,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center gap-6">
           <div className="flex flex-col items-center gap-1">
             <p
-              className={`${poppins.className} text-[9px] font-medium tracking-widest uppercase text-gray-300`}
+              className={`${poppins.className} text-[11px] font-medium tracking-widest uppercase text-gray-500`}
             >
               © {new Date().getFullYear()} Lovique Studio.
             </p>
@@ -183,7 +183,7 @@ export default function Footer() {
               href="https://storyset.com/people"
               target="_blank"
               rel="noopener noreferrer"
-              className={`${poppins.className} text-[8px] tracking-widest uppercase text-gray-300 hover:text-[#ee2b8c] transition-colors`}
+              className={`${poppins.className} text-[11px] tracking-widest uppercase text-gray-500 hover:text-[#ee2b8c] transition-colors`}
             >
               Illustrations by Storyset
             </a>
@@ -217,7 +217,7 @@ export default function Footer() {
                     key={item.label}
                     href={item.href}
                     target="_blank"
-                    className={`${poppins.className} text-[9px] font-bold tracking-widest uppercase text-gray-400 hover:text-[#2a1b1b] transition-colors`}
+                    className={`${poppins.className} text-[11px] font-bold tracking-widest uppercase text-gray-500 hover:text-[#2a1b1b] transition-colors`}
                   >
                     {item.label}
                   </Link>
@@ -227,7 +227,7 @@ export default function Footer() {
                 <button
                   key={item.label}
                   onClick={item.action}
-                  className={`${poppins.className} text-[9px] font-bold tracking-widest uppercase text-gray-400 hover:text-[#2a1b1b] transition-colors`}
+                  className={`${poppins.className} text-[11px] font-bold tracking-widest uppercase text-gray-500 hover:text-[#2a1b1b] transition-colors`}
                 >
                   {item.label}
                 </button>

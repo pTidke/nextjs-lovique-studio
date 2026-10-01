@@ -1,12 +1,10 @@
 "use client";
 
-import SanityImage from "@/components/sanity-image";
 import { playfair, poppins } from "@/lib/fonts";
 import Link from "next/link";
-import { ArrowRight, Instagram } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { formatPrice } from "@/lib/utils";
+import { ProductCard } from "@/components/product-card";
 
 type Product = {
   _id: string;
@@ -15,30 +13,20 @@ type Product = {
   slug: { current: string };
   cover?: { url?: string; lqip?: string };
   price?: number;
-  description?: string;
   instagramLink?: string;
   category?: string;
   isNew?: boolean;
 };
 
 interface SignatureCollectionProps {
-  products: Product[];
+  products: Product[]; // already limited to 3 new arrivals by NEW_ARRIVALS
 }
 
 export default function SignatureCollection({
   products,
 }: SignatureCollectionProps) {
-  const router = useRouter();
-  const displayedProducts = products; // already filtered to 3 new arrivals by NEW_ARRIVALS
-
-  const categoryDisplayMap: Record<string, string> = {
-    singles: "Singles",
-    flower_basket: "Flower Basket",
-    bouquets: "Bouquet",
-    flower_pots: "Flower pot",
-    magazine: "Magazine",
-    wall_art: "Wall Art",
-  };
+  // No product flagged "new" in Sanity — skip the section instead of an empty grid
+  if (products.length === 0) return null;
 
   return (
     <section className="w-full py-24 bg-white">
@@ -47,7 +35,7 @@ export default function SignatureCollection({
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div className="space-y-4">
             <span
-              className={`${poppins.className} text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
             >
               New Arrivals
             </span>
@@ -59,7 +47,7 @@ export default function SignatureCollection({
           </div>
           <Link
             href="/catalogue"
-            className={`${poppins.className} group flex items-center gap-2 text-[14px] md:text-sm font-bold tracking-[0.2em] uppercase text-gray-400 hover:text-[#ee2b8c] transition-colors pb-1`}
+            className={`${poppins.className} group flex items-center gap-2 text-[14px] md:text-sm font-bold tracking-[0.2em] uppercase text-gray-500 hover:text-[#ee2b8c] transition-colors pb-1`}
           >
             See All{" "}
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -68,93 +56,25 @@ export default function SignatureCollection({
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {displayedProducts.map((product, index) => (
+          {products.map((product, index) => (
             <motion.div
               key={product._id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
               viewport={{ once: true }}
-              onClick={() => router.push(`/product/${product.slug.current}`)}
-              className="group cursor-pointer rounded-[1.5rem] bg-[#fffafa] bg-gradient-to-b from-white via-[#fff5f8] to-[#fffafa] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] transition-all duration-500 relative"
             >
-              {/* Gaussian Glow Background */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(238,43,140,0.05)_0%,_transparent_50%)] pointer-events-none" />
-
-              {/* Image Container with Studio Styling */}
-              <div className="relative aspect-[3/4] overflow-hidden bg-[#fffafa] rounded-t-[1.5rem]">
-                {product.cover?.url ? (
-                  <SanityImage
-                    src={product.cover.url}
-                    lqip={product.cover.lqip}
-                    alt={product.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-[0.98] mix-blend-multiply"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-300">
-                    No Image Available
-                  </div>
-                )}
-
-                {/* Studio Refinements: Light unification & Depth */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#ee2b8c]/5 to-transparent pointer-events-none" />
-                <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.03)] pointer-events-none" />
-
-                {/* Instagram Icon Overlay */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.open(
-                      product.instagramLink ||
-                        "https://instagram.com/lovique._studio",
-                      "_blank",
-                      "noopener,noreferrer",
-                    );
-                  }}
-                  className="absolute top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-all duration-300 z-10 text-gray-400 hover:text-[#ee2b8c] md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0"
-                >
-                  <Instagram className="w-5 h-5" />
-                </button>
-
-                {/* NEW Badge - Refined with glow */}
-                {product.isNew && (
-                  <div className="absolute top-6 left-6 z-20">
-                    <div className="relative bg-[#ee2b8c] text-white text-[9px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm backdrop-blur-sm border border-white/20">
-                      New
-                    </div>
-                  </div>
-                )}
-
-                {/* Category Pill - Bottom Right */}
-                {product.category && (
-                  <div className="absolute bottom-6 right-6 z-20">
-                    <div className="bg-white/40 backdrop-blur-md text-[#2a1b1b] text-[8px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-white/30 shadow-sm">
-                      {categoryDisplayMap[product.category] || product.category}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Info Container Area */}
-              <div className="p-4 space-y-1">
-                <h3
-                  className={`${playfair.className} text-xl md:text-2xl font-bold text-[#2a1b1b] leading-tight`}
-                >
-                  {product.name}
-                </h3>
-                {!!product.price && (
-                  <p className={`${poppins.className} text-lg font-medium text-[#ee2b8c]`}>
-                    {formatPrice(product.price)}
-                  </p>
-                )}
-                <p
-                  className={`${poppins.className} text-sm text-gray-500 leading-relaxed line-clamp-3`}
-                >
-                  {product.theme || "Lovique Studio Special"}
-                </p>
-              </div>
+              <ProductCard
+                slug={product.slug.current}
+                name={product.name}
+                theme={product.theme}
+                price={product.price}
+                coverUrl={product.cover?.url}
+                coverLqip={product.cover?.lqip}
+                category={product.category}
+                instagramLink={product.instagramLink}
+                isNew={product.isNew}
+              />
             </motion.div>
           ))}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import SanityImage from "@/components/sanity-image";
+import { ProductCard } from "@/components/product-card";
 import { playfair, poppins } from "@/lib/fonts";
 import Carousel from "@/components/carousel";
 import { Instagram, ChevronLeft, Share2, Check } from "lucide-react";
@@ -121,7 +121,7 @@ export default function ProductView({
         >
           <Link
             href={backInfo.href}
-            className={`${poppins.className} inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.3em] uppercase text-gray-400 hover:text-[#ee2b8c] transition-colors`}
+            className={`${poppins.className} inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.3em] uppercase text-gray-500 hover:text-[#ee2b8c] transition-colors`}
           >
             <ChevronLeft className="w-4 h-4" /> {backInfo.label}
           </Link>
@@ -150,7 +150,7 @@ export default function ProductView({
             <div className="space-y-4 text-center lg:text-left">
               {theme && (
                 <span
-                  className={`${poppins.className} inline-block bg-[#fff5f8] text-[#ee2b8c] text-[10px] font-bold tracking-[0.2em] uppercase px-4 py-2 rounded-full border border-[#ee2b8c]/10`}
+                  className={`${poppins.className} inline-block bg-[#fff5f8] text-[#ee2b8c] text-[11px] font-bold tracking-[0.2em] uppercase px-4 py-2 rounded-full border border-[#ee2b8c]/10`}
                 >
                   {theme}
                 </span>
@@ -255,45 +255,18 @@ export default function ProductView({
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedProducts.map((item) => (
-                <Link
+                <ProductCard
                   key={item._id}
-                  href={`/product/${item.slug.current}`}
-                  className="group block overflow-hidden rounded-[1.5rem] bg-[#fffafa] bg-gradient-to-b from-white via-[#fff5f8] to-[#fffafa] shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] transition-all duration-500"
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-t-[1.5rem] bg-[#fffafa]">
-                    {item.cover?.url ? (
-                      <SanityImage
-                        src={item.cover.url}
-                        lqip={item.cover.lqip}
-                        alt={item.name}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-300">
-                        No Image
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4 space-y-1">
-                    <h3
-                      className={`${playfair.className} text-xl md:text-2xl font-bold text-[#2a1b1b] leading-tight`}
-                    >
-                      {item.name}
-                    </h3>
-                    {!!item.price && (
-                      <p className={`${poppins.className} text-lg font-medium text-[#ee2b8c]`}>
-                        {formatPrice(item.price)}
-                      </p>
-                    )}
-                    <p
-                      className={`${poppins.className} text-sm text-gray-500 leading-relaxed`}
-                    >
-                      {item.theme || "Lovique Studio Special"}
-                    </p>
-                  </div>
-                </Link>
+                  slug={item.slug.current}
+                  name={item.name}
+                  theme={item.theme}
+                  price={item.price}
+                  coverUrl={item.cover?.url}
+                  coverLqip={item.cover?.lqip}
+                  category={item.category}
+                  instagramLink={item.instagramLink}
+                  isNew={item.isNew}
+                />
               ))}
             </div>
           </div>
