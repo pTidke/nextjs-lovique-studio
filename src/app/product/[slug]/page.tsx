@@ -1,4 +1,5 @@
 import { client } from "@/sanity/client";
+import type { Product, ProductSummary } from "@/sanity/types";
 import { PRODUCT_BY_SLUG, RELATED_PRODUCTS } from "@/sanity/queries";
 import { ogImageUrl } from "@/sanity/image";
 import ProductView from "@/components/product-view";
@@ -12,7 +13,7 @@ export const revalidate = 60;
 
 // cache() dedupes the call shared by generateMetadata and the page
 const getProduct = cache(async (slug: string) =>
-  client.fetch(PRODUCT_BY_SLUG, { slug }),
+  client.fetch<Product | null>(PRODUCT_BY_SLUG, { slug }),
 );
 
 // Prebuild every product page; new products still render on first visit, then cache
@@ -66,7 +67,7 @@ export default async function ProductPage({
   }
 
   const relatedProducts = product.category
-    ? await client.fetch(RELATED_PRODUCTS, {
+    ? await client.fetch<ProductSummary[]>(RELATED_PRODUCTS, {
         category: product.category,
         slug,
       })
@@ -80,7 +81,7 @@ export default async function ProductPage({
     name: product.name.trim(),
     description: productDescription(product),
     image: (product.images ?? [])
-      .map((img: { url?: string }) => img.url)
+      .map((img) => img.url)
       .filter(Boolean),
     brand: { "@type": "Brand", name: SITE_NAME },
     url,

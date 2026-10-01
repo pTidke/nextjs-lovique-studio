@@ -1,4 +1,5 @@
 import { client } from "@/sanity/client";
+import type { ProductSummary } from "@/sanity/types";
 import { playfair, poppins } from "@/lib/fonts";
 import { PRODUCTS_BY_CATEGORY } from "@/sanity/queries";
 import { ProductCard } from "@/components/product-card";
@@ -9,18 +10,6 @@ import { pageMetadata } from "@/lib/site";
 import { categoryMap } from "@/lib/categories";
 
 export const revalidate = 60;
-
-type Product = {
-  _id: string;
-  name: string;
-  theme?: string;
-  price?: number;
-  instagramLink?: string;
-  category?: string;
-  isNew?: boolean;
-  slug: { current: string };
-  cover?: { url?: string; lqip?: string };
-};
 
 export function generateStaticParams() {
   return Object.keys(categoryMap).map((slug) => ({ slug }));
@@ -49,7 +38,7 @@ export default async function CategoryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const products = await client.fetch(PRODUCTS_BY_CATEGORY, { category: slug });
+  const products = await client.fetch<ProductSummary[]>(PRODUCTS_BY_CATEGORY, { category: slug });
   const category = categoryMap[slug];
 
   // Unknown slug with nothing in it — real 404 instead of an empty "Collection" page
@@ -68,12 +57,12 @@ export default async function CategoryPage({
       <section className="relative z-10 pt-32 md:pt-40 px-6 text-center">
         <div className="max-w-4xl mx-auto space-y-2">
           <span
-            className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+            className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand`}
           >
             Category
           </span>
           <h1
-            className={`${playfair.className} text-5xl md:text-7xl lg:text-8xl text-[#2a1b1b] animate-fade-in`}
+            className={`${playfair.className} text-5xl md:text-7xl lg:text-8xl text-ink`}
           >
             {categoryTitle}
           </h1>
@@ -89,7 +78,7 @@ export default async function CategoryPage({
       <section className="relative z-10 max-w-7xl mx-auto px-6 mt-16">
         {products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-            {products.map((product: Product) => (
+            {products.map((product) => (
               <ProductCard
                 key={product._id}
                 slug={product.slug.current}

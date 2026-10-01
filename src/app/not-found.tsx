@@ -5,12 +5,12 @@ export default function NotFound() {
   return (
     <main className="min-h-screen bg-white flex flex-col items-center justify-center px-6 text-center">
       <span
-        className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c] mb-4`}
+        className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand mb-4`}
       >
         Page Not Found
       </span>
       <h1
-        className={`${playfair.className} italic text-7xl md:text-9xl text-[#2a1b1b] mb-6`}
+        className={`${playfair.className} italic text-7xl md:text-9xl text-ink mb-6`}
       >
         404
       </h1>
@@ -23,13 +23,13 @@ export default function NotFound() {
       <div className="flex flex-col sm:flex-row gap-4">
         <Link
           href="/catalogue"
-          className="bg-[#ee2b8c] text-white px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-[#d41b76] transition-all shadow-lg hover:shadow-xl"
+          className="bg-brand text-white px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-brand-dark transition-all shadow-lg hover:shadow-xl"
         >
           Explore Collection
         </Link>
         <Link
           href="/"
-          className="bg-transparent border border-[#2a1b1b]/20 text-[#2a1b1b] px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white/50 transition-all hover:border-black"
+          className="bg-transparent border border-ink/20 text-ink px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white/50 transition-all hover:border-black"
         >
           Back to Home
         </Link>

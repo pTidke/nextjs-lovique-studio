@@ -1,6 +1,7 @@
 "use client";
 
 import { ProductCard } from "@/components/product-card";
+import type { Product, ProductSummary } from "@/sanity/types";
 import { playfair, poppins } from "@/lib/fonts";
 import Carousel from "@/components/carousel";
 import {
@@ -18,45 +19,12 @@ import BrandBackground from "@/components/brand-background";
 import { EMOJI_REGEX, formatPrice } from "@/lib/utils";
 import { INSTAGRAM_DM_URL } from "@/lib/site";
 
-type ProductImage = {
-  asset: {
-    _ref: string;
-    _type: string;
-  };
-  _key: string;
-  url?: string;
-  lqip?: string;
-};
-
-type RelatedProduct = {
-  _id: string;
-  name: string;
-  theme?: string;
-  slug: { current: string };
-  cover?: { url?: string; lqip?: string };
-  price?: number;
-  category?: string;
-  isNew?: boolean;
-  instagramLink?: string;
-};
-
-type Product = {
-  name: string;
-  description: string;
-  theme: string;
-  price?: number;
-  images: ProductImage[];
-  whatsappLink?: string;
-  instagramLink?: string;
-  category?: string;
-};
-
 export default function ProductView({
   product,
   relatedProducts = [],
 }: {
   product: Product;
-  relatedProducts?: RelatedProduct[];
+  relatedProducts?: ProductSummary[];
 }) {
   const [backInfo, setBackInfo] = useState({
     href: "/",
@@ -159,7 +127,7 @@ export default function ProductView({
         >
           <Link
             href={backInfo.href}
-            className={`${poppins.className} inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.3em] uppercase text-gray-500 hover:text-[#ee2b8c] transition-colors`}
+            className={`${poppins.className} inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.3em] uppercase text-gray-500 hover:text-brand transition-colors`}
           >
             <ChevronLeft className="w-4 h-4" /> {backInfo.label}
           </Link>
@@ -174,7 +142,7 @@ export default function ProductView({
             className="relative"
           >
             {/* Soft Glow behind Carousel */}
-            <div className="absolute -inset-10 bg-[#ee2b8c]/5 blur-[60px] rounded-full pointer-events-none" />
+            <div className="absolute -inset-10 bg-brand/5 blur-[60px] rounded-full pointer-events-none" />
             <Carousel images={images} name={name} />
           </motion.div>
 
@@ -188,22 +156,22 @@ export default function ProductView({
             <div className="space-y-4 text-center lg:text-left">
               {theme && (
                 <span
-                  className={`${poppins.className} inline-block bg-[#fff5f8] text-[#ee2b8c] text-[11px] font-bold tracking-[0.2em] uppercase px-4 py-2 rounded-full border border-[#ee2b8c]/10`}
+                  className={`${poppins.className} inline-block bg-blush-deep text-brand text-[11px] font-bold tracking-[0.2em] uppercase px-4 py-2 rounded-full border border-brand/10`}
                 >
                   {theme}
                 </span>
               )}
               <h1
-                className={`${playfair.className} italic text-5xl md:text-6xl lg:text-7xl text-[#2a1b1b] leading-tight`}
+                className={`${playfair.className} italic text-5xl md:text-6xl lg:text-7xl text-ink leading-tight`}
               >
                 {name}
               </h1>
               {!!price && (
-                <p className={`${poppins.className} text-2xl font-medium text-[#ee2b8c] mt-2`}>
+                <p className={`${poppins.className} text-2xl font-medium text-brand mt-2`}>
                   {formatPrice(price)}
                 </p>
               )}
-              <div className="w-20 h-[1px] bg-[#ee2b8c]/20 mx-auto lg:mx-0" />
+              <div className="w-20 h-[1px] bg-brand/20 mx-auto lg:mx-0" />
             </div>
 
             <div
@@ -233,7 +201,7 @@ export default function ProductView({
                         key={idx}
                         className="flex gap-3 items-start justify-center lg:justify-start"
                       >
-                        <span className="text-[#ee2b8c] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ee2b8c] shrink-0" />
+                        <span className="text-brand mt-1.5 w-1.5 h-1.5 rounded-full bg-brand shrink-0" />
                         <span className="text-left">{content}</span>
                       </div>
                     );
@@ -257,7 +225,7 @@ export default function ProductView({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleEnquire}
-                className="w-full sm:w-auto flex items-center justify-center gap-3 bg-[#ee2b8c] text-white px-10 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-[#d41b76] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                className="w-full sm:w-auto flex items-center justify-center gap-3 bg-brand text-white px-10 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-brand-dark transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
                 <MessageCircle className="w-5 h-5" />
                 <span>Enquire to Order</span>
@@ -279,7 +247,7 @@ export default function ProductView({
                   href={instagramLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 bg-transparent border border-[#2a1b1b]/10 text-[#2a1b1b] px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white hover:border-[#2a1b1b] transition-all"
+                  className="flex items-center justify-center gap-3 bg-transparent border border-ink/10 text-ink px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white hover:border-ink transition-all"
                 >
                   <Instagram className="w-5 h-5" />
                   <span>View on Instagram</span>
@@ -288,7 +256,7 @@ export default function ProductView({
 
               <button
                 onClick={handleShare}
-                className="flex items-center justify-center gap-3 bg-transparent border border-[#2a1b1b]/10 text-[#2a1b1b] px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white hover:border-[#2a1b1b] transition-all"
+                className="flex items-center justify-center gap-3 bg-transparent border border-ink/10 text-ink px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white hover:border-ink transition-all"
               >
                 {shared ? (
                   <>
@@ -305,8 +273,8 @@ export default function ProductView({
             </div>
 
             {/* Ordering note (from Terms: 4–5 days lead time, UPI advance) */}
-            <div className="flex items-start gap-3 justify-center lg:justify-start border-t border-[#2a1b1b]/5 pt-6 max-w-xl">
-              <Clock className="w-4 h-4 mt-1 shrink-0 text-[#ee2b8c]" />
+            <div className="flex items-start gap-3 justify-center lg:justify-start border-t border-ink/5 pt-6 max-w-xl">
+              <Clock className="w-4 h-4 mt-1 shrink-0 text-brand" />
               <p
                 className={`${poppins.className} text-sm text-gray-600 leading-relaxed text-left`}
               >
@@ -321,9 +289,9 @@ export default function ProductView({
       {/* Related Products */}
       {relatedProducts.length > 0 && (
         <section className="relative z-10 max-w-7xl mx-auto px-6 pt-24">
-          <div className="border-t border-[#2a1b1b]/5 pt-16">
+          <div className="border-t border-ink/5 pt-16">
             <h2
-              className={`${playfair.className} italic text-3xl md:text-4xl text-[#2a1b1b] text-center mb-12`}
+              className={`${playfair.className} italic text-3xl md:text-4xl text-ink text-center mb-12`}
             >
               You May Also Love
             </h2>
@@ -362,13 +330,13 @@ export default function ProductView({
           >
             <div className="min-w-0 flex-1">
               <p
-                className={`${playfair.className} truncate text-base text-[#2a1b1b] leading-tight`}
+                className={`${playfair.className} truncate text-base text-ink leading-tight`}
               >
                 {name}
               </p>
               {!!price && (
                 <p
-                  className={`${poppins.className} text-sm font-medium text-[#ee2b8c] leading-tight`}
+                  className={`${poppins.className} text-sm font-medium text-brand leading-tight`}
                 >
                   {formatPrice(price)}
                 </p>
@@ -379,7 +347,7 @@ export default function ProductView({
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleEnquire}
-              className="shrink-0 flex items-center gap-2 bg-[#ee2b8c] text-white px-5 py-3 rounded-full text-[11px] font-bold tracking-[0.15em] uppercase hover:bg-[#d41b76] transition-colors shadow-md"
+              className="shrink-0 flex items-center gap-2 bg-brand text-white px-5 py-3 rounded-full text-[11px] font-bold tracking-[0.15em] uppercase hover:bg-brand-dark transition-colors shadow-md"
             >
               <MessageCircle className="w-4 h-4" />
               Enquire

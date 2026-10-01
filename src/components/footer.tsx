@@ -13,7 +13,7 @@ export default function Footer() {
     <footer className="w-full bg-white">
       {/* 🌸 Studio / Pre-Footer Section (Homepage Only) */}
       {pathname === "/" && (
-        <section className="bg-[#fffafa] py-24 px-6 overflow-hidden">
+        <section className="bg-blush py-24 px-6 overflow-hidden">
           <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
             {/* Left: Illustration */}
             <div className="w-full lg:w-1/2 flex justify-center">
@@ -31,12 +31,12 @@ export default function Footer() {
             <div className="w-full lg:w-1/2 space-y-8 text-center lg:text-left">
               <div className="space-y-4">
                 <span
-                  className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+                  className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand`}
                 >
                   Luxury Minimalism
                 </span>
                 <h2
-                  className={`${playfair.className} italic text-4xl md:text-5xl lg:text-6xl text-[#2a1b1b] leading-tight`}
+                  className={`${playfair.className} italic text-4xl md:text-5xl lg:text-6xl text-ink leading-tight`}
                 >
                   Crafted with <br className="hidden md:block" /> Intention
                 </h2>
@@ -53,7 +53,7 @@ export default function Footer() {
 
               <Link
                 href="/story"
-                className="bg-[#4a3f3f] text-white px-10 py-4 rounded-full text-[11px] md:text-xs font-bold tracking-[0.2em] uppercase transition-all shadow-md hover:shadow-lg hover:text-white"
+                className="bg-ink-soft text-white px-10 py-4 rounded-full text-[11px] md:text-xs font-bold tracking-[0.2em] uppercase transition-all shadow-md hover:shadow-lg hover:text-white"
               >
                 Learn More
               </Link>
@@ -66,7 +66,7 @@ export default function Footer() {
       <section className="py-8 px-6 border-t border-gray-50 text-center">
         <div className="max-w-3xl mx-auto space-y-6">
           <h3
-            className={`${playfair.className} text-2xl md:text-3xl text-[#2a1b1b]`}
+            className={`${playfair.className} text-2xl md:text-3xl text-ink`}
           >
             Lovique Studio
           </h3>
@@ -93,7 +93,7 @@ export default function Footer() {
               href="https://storyset.com/people"
               target="_blank"
               rel="noopener noreferrer"
-              className={`${poppins.className} text-[11px] tracking-widest uppercase text-gray-500 hover:text-[#ee2b8c] transition-colors`}
+              className={`${poppins.className} text-[11px] tracking-widest uppercase text-gray-500 hover:text-brand transition-colors`}
             >
               Illustrations by Storyset
             </a>
@@ -110,7 +110,7 @@ export default function Footer() {
                 {...(item.external
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
-                className={`${poppins.className} text-[11px] font-bold tracking-widest uppercase text-gray-500 hover:text-[#2a1b1b] transition-colors`}
+                className={`${poppins.className} text-[11px] font-bold tracking-widest uppercase text-gray-500 hover:text-ink transition-colors`}
               >
                 {item.label}
               </Link>

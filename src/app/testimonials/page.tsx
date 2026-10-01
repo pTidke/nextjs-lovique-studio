@@ -1,4 +1,5 @@
 import { client } from "@/sanity/client";
+import type { Testimonial } from "@/sanity/types";
 import { TESTIMONIALS } from "@/sanity/queries";
 import { playfair, poppins } from "@/lib/fonts";
 import SanityImage from "@/components/sanity-image";
@@ -14,36 +15,28 @@ export const metadata: Metadata = pageMetadata({
 
 export const revalidate = 60;
 
-type Testimonial = {
-  _id: string;
-  name: string;
-  message: string;
-  date: string;
-  pfp?: string;
-};
-
 export default async function TestimonialsPage() {
-  const testimonials: Testimonial[] = await client.fetch(TESTIMONIALS);
+  const testimonials = await client.fetch<Testimonial[]>(TESTIMONIALS);
 
   return (
     <main className="min-h-screen bg-white">
       {/* Header Section — Matching "Our Story" style */}
-      <section className="bg-[#fffafa] pt-40 pb-32 px-6">
+      <section className="bg-blush pt-40 pb-32 px-6">
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center space-y-8 animate-[fade-up_0.7s_ease-out_forwards]">
           <div className="space-y-4">
             <span
-              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand`}
             >
               Customer Stories
             </span>
             <h1
-              className={`${playfair.className} italic text-5xl md:text-7xl lg:text-9xl text-[#2a1b1b] leading-tight`}
+              className={`${playfair.className} italic text-5xl md:text-7xl lg:text-9xl text-ink leading-tight`}
             >
               Testimonials
             </h1>
           </div>
 
-          <div className="w-16 h-px bg-[#ee2b8c]/30" />
+          <div className="w-16 h-px bg-brand/30" />
 
           <p
             className={`${playfair.className} text-xl md:text-2xl lg:text-3xl text-gray-500 italic max-w-3xl leading-relaxed`}
@@ -60,12 +53,12 @@ export default async function TestimonialsPage() {
             testimonials.map((t, index) => (
               <div
                 key={t._id}
-                className="group relative bg-[#fffafa]/50 backdrop-blur-sm border border-pink-100 rounded-[2.5rem] p-8 md:p-12 flex flex-col items-center text-center space-y-8 animate-[fade-up_1s_ease-out_forwards] hover:shadow-xl hover:shadow-pink-500/5 transition-all duration-500"
+                className="group relative bg-blush/50 backdrop-blur-sm border border-pink-100 rounded-[2.5rem] p-8 md:p-12 flex flex-col items-center text-center space-y-8 animate-[fade-up_1s_ease-out_forwards] hover:shadow-xl hover:shadow-pink-500/5 transition-all duration-500"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {/* Perfectly Circular Profile Image */}
                 <div className="relative w-20 h-20 md:w-24 md:h-24">
-                  <div className="absolute inset-0 bg-[#ee2b8c]/5 rounded-full blur-2xl group-hover:bg-[#ee2b8c]/10 transition-colors" />
+                  <div className="absolute inset-0 bg-brand/5 rounded-full blur-2xl group-hover:bg-brand/10 transition-colors" />
                   {t.pfp ? (
                     <div className="relative w-full h-full rounded-full overflow-hidden border border-white shadow-sm">
                       <SanityImage
@@ -89,7 +82,7 @@ export default async function TestimonialsPage() {
                 <div className="space-y-6 max-w-xl">
                   <div className="relative">
                     <span
-                      className={`${playfair.className} absolute -top-6 -left-2 text-5xl text-[#ee2b8c]/15 leading-none select-none`}
+                      className={`${playfair.className} absolute -top-6 -left-2 text-5xl text-brand/15 leading-none select-none`}
                     >
                       &ldquo;
                     </span>
@@ -99,7 +92,7 @@ export default async function TestimonialsPage() {
                       {t.message}
                     </p>
                     <span
-                      className={`${playfair.className} absolute -bottom-8 -right-2 text-5xl text-[#ee2b8c]/15 leading-none select-none`}
+                      className={`${playfair.className} absolute -bottom-8 -right-2 text-5xl text-brand/15 leading-none select-none`}
                     >
                       &rdquo;
                     </span>
@@ -107,7 +100,7 @@ export default async function TestimonialsPage() {
 
                   <div className="space-y-1">
                     <h3
-                      className={`${playfair.className} text-xl md:text-2xl text-[#2a1b1b] font-medium`}
+                      className={`${playfair.className} text-xl md:text-2xl text-ink font-medium`}
                     >
                       {t.name}
                     </h3>

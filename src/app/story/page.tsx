@@ -14,22 +14,22 @@ export default function StoryPage() {
   return (
     <main className="min-h-screen bg-white animate-fade-up">
       {/* Header Section */}
-      <section className="bg-[#fffafa] pt-40 pb-32 px-6">
+      <section className="bg-blush pt-40 pb-32 px-6">
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center space-y-8">
           <div className="space-y-4">
             <span
-              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand`}
             >
               Est. 2025
             </span>
             <h1
-              className={`${playfair.className} italic text-5xl md:text-7xl lg:text-9xl text-[#2a1b1b] leading-tight`}
+              className={`${playfair.className} italic text-5xl md:text-7xl lg:text-9xl text-ink leading-tight`}
             >
               Our Story
             </h1>
           </div>
 
-          <div className="w-16 h-px bg-[#ee2b8c]/30" />
+          <div className="w-16 h-px bg-brand/30" />
 
           <p
             className={`${playfair.className} text-xl md:text-2xl lg:text-3xl text-gray-500 italic max-w-3xl leading-relaxed`}
@@ -60,7 +60,7 @@ export default function StoryPage() {
         {/* Philosophy */}
         <div className="space-y-8">
           <h2
-            className={`${playfair.className} text-3xl md:text-4xl text-[#2a1b1b]`}
+            className={`${playfair.className} text-3xl md:text-4xl text-ink`}
           >
             A Vision of Minimalist Artistry
           </h2>
@@ -77,15 +77,15 @@ export default function StoryPage() {
 
         {/* Decorative Divider */}
         <div className="flex items-center justify-center gap-4">
-          <div className="w-16 h-px bg-[#ee2b8c]/20" />
-          <div className="w-1.5 h-1.5 rounded-full bg-[#ee2b8c]/30" />
-          <div className="w-16 h-px bg-[#ee2b8c]/20" />
+          <div className="w-16 h-px bg-brand/20" />
+          <div className="w-1.5 h-1.5 rounded-full bg-brand/30" />
+          <div className="w-16 h-px bg-brand/20" />
         </div>
 
         {/* The Studio */}
         <div className="space-y-8">
           <h2
-            className={`${playfair.className} text-3xl md:text-4xl text-[#2a1b1b]`}
+            className={`${playfair.className} text-3xl md:text-4xl text-ink`}
           >
             Creativity behind our Flowers
           </h2>
@@ -93,19 +93,19 @@ export default function StoryPage() {
             className={`${poppins.className} text-sm md:text-base text-gray-500 leading-relaxed font-light space-y-3 list-none`}
           >
             <li className="flex items-start gap-3">
-              <span className="text-[#ee2b8c] mt-1.5 text-[6px]">●</span>
+              <span className="text-brand mt-1.5 text-[6px]">●</span>
               <span>Rooted in passion, imagination, and emotional expression</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-[#ee2b8c] mt-1.5 text-[6px]">●</span>
+              <span className="text-brand mt-1.5 text-[6px]">●</span>
               <span>Crafted with a strong sense of luxury, elegance, and premium detailing</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-[#ee2b8c] mt-1.5 text-[6px]">●</span>
+              <span className="text-brand mt-1.5 text-[6px]">●</span>
               <span>Designed using rich textures, refined color palettes, and graceful compositions</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-[#ee2b8c] mt-1.5 text-[6px]">●</span>
+              <span className="text-brand mt-1.5 text-[6px]">●</span>
               <span>Created with timeless forever flowers that retain their beauty and richness forever</span>
             </li>
           </ul>

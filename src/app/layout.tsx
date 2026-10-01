@@ -5,7 +5,6 @@ import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import GlobalPetals from "@/components/global-petals"; // client-only petals wrapper
-import ScrollReset from "@/components/scroll-reset";
 import NavigationTracker from "@/components/navigation-tracker";
 import MotionProvider from "@/components/motion-provider";
 
@@ -41,7 +40,6 @@ export default function RootLayout({
           {/* Header */}
           <Header />
           <NavigationTracker />
-          <ScrollReset />
           <div className="flex-1 relative z-10">{children}</div>
 
           {/* Footer */}

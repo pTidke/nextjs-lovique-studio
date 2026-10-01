@@ -1,4 +1,5 @@
 import { client } from "@/sanity/client";
+import type { ProductSummary } from "@/sanity/types";
 import { playfair, poppins } from "@/lib/fonts";
 import { PRODUCTS_GRID } from "@/sanity/queries";
 import { ProductCard } from "@/components/product-card";
@@ -16,19 +17,7 @@ export const metadata: Metadata = pageMetadata({
 export const revalidate = 60;
 
 export default async function CataloguePage() {
-  const products = await client.fetch(PRODUCTS_GRID);
-
-  type Product = {
-    _id: string;
-    name: string;
-    theme?: string;
-    price?: number;
-    slug: { current: string };
-    cover?: { url?: string; lqip?: string };
-    category?: string;
-    instagramLink?: string;
-    isNew?: boolean;
-  };
+  const products = await client.fetch<ProductSummary[]>(PRODUCTS_GRID);
 
   return (
     <main className="relative min-h-screen bg-white pb-32 overflow-hidden">
@@ -38,12 +27,12 @@ export default async function CataloguePage() {
       <section className="relative z-10 pt-40 pb-20 px-6">
         <div className="max-w-7xl mx-auto text-center space-y-2">
           <span
-            className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+            className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand`}
           >
             Explore Our Studio
           </span>
           <h1
-            className={`${playfair.className} italic text-5xl md:text-7xl lg:text-8xl text-[#2a1b1b] leading-tight animate-fade-in`}
+            className={`${playfair.className} italic text-5xl md:text-7xl lg:text-8xl text-ink leading-tight`}
           >
             The Full Catalogue
           </h1>
@@ -59,7 +48,7 @@ export default async function CataloguePage() {
       {/* Grid Section */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 mt-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-          {products.map((product: Product) => (
+          {products.map((product) => (
             <ProductCard
               key={product._id}
               slug={product.slug.current}

@@ -1,25 +1,14 @@
 "use client";
 
 import { playfair, poppins } from "@/lib/fonts";
+import type { ProductSummary } from "@/sanity/types";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { ProductCard } from "@/components/product-card";
 
-type Product = {
-  _id: string;
-  name: string;
-  theme?: string;
-  slug: { current: string };
-  cover?: { url?: string; lqip?: string };
-  price?: number;
-  instagramLink?: string;
-  category?: string;
-  isNew?: boolean;
-};
-
 interface SignatureCollectionProps {
-  products: Product[]; // already limited to 3 new arrivals by NEW_ARRIVALS
+  products: ProductSummary[]; // already limited to 3 new arrivals by NEW_ARRIVALS
 }
 
 export default function SignatureCollection({
@@ -35,19 +24,19 @@ export default function SignatureCollection({
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div className="space-y-4">
             <span
-              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+              className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand`}
             >
               New Arrivals
             </span>
             <h2
-              className={`${playfair.className} italic text-4xl md:text-5xl lg:text-6xl text-[#2a1b1b]`}
+              className={`${playfair.className} italic text-4xl md:text-5xl lg:text-6xl text-ink`}
             >
               Our Collection
             </h2>
           </div>
           <Link
             href="/catalogue"
-            className={`${poppins.className} group flex items-center gap-2 text-[14px] md:text-sm font-bold tracking-[0.2em] uppercase text-gray-500 hover:text-[#ee2b8c] transition-colors pb-1`}
+            className={`${poppins.className} group flex items-center gap-2 text-[14px] md:text-sm font-bold tracking-[0.2em] uppercase text-gray-500 hover:text-brand transition-colors pb-1`}
           >
             See All{" "}
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

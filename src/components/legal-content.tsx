@@ -4,7 +4,7 @@ export function PrivacyContent() {
   return (
     <>
       <section className="space-y-3">
-        <h2 className="text-[#2a1b1b] font-medium uppercase tracking-widest text-xs">
+        <h2 className="text-ink font-medium uppercase tracking-widest text-xs">
           01. Information Collection
         </h2>
         <p>
@@ -14,7 +14,7 @@ export function PrivacyContent() {
         </p>
       </section>
       <section className="space-y-3">
-        <h2 className="text-[#2a1b1b] font-medium uppercase tracking-widest text-xs">
+        <h2 className="text-ink font-medium uppercase tracking-widest text-xs">
           02. How We Use Information
         </h2>
         <p>
@@ -24,7 +24,7 @@ export function PrivacyContent() {
         </p>
       </section>
       <section className="space-y-3">
-        <h2 className="text-[#2a1b1b] font-medium uppercase tracking-widest text-xs">
+        <h2 className="text-ink font-medium uppercase tracking-widest text-xs">
           03. Studio Security
         </h2>
         <p>
@@ -41,7 +41,7 @@ export function TermsContent() {
   return (
     <>
       <section className="space-y-3">
-        <h2 className="text-[#2a1b1b] font-medium uppercase tracking-widest text-xs">
+        <h2 className="text-ink font-medium uppercase tracking-widest text-xs">
           01. Custom Commissions
         </h2>
         <p>
@@ -51,7 +51,7 @@ export function TermsContent() {
         </p>
       </section>
       <section className="space-y-3">
-        <h2 className="text-[#2a1b1b] font-medium uppercase tracking-widest text-xs">
+        <h2 className="text-ink font-medium uppercase tracking-widest text-xs">
           02. Orders & Delivery
         </h2>
         <p>
@@ -63,24 +63,24 @@ export function TermsContent() {
         </p>
       </section>
       <section className="space-y-3">
-        <h2 className="text-[#2a1b1b] font-medium uppercase tracking-widest text-xs">
+        <h2 className="text-ink font-medium uppercase tracking-widest text-xs">
           03. Care & Lifespan
         </h2>
         <ul className="space-y-2 list-none">
           <li className="flex items-start gap-2">
-            <span className="text-[#ee2b8c] mt-1 text-[5px]">●</span>
+            <span className="text-brand mt-1 text-[5px]">●</span>
             <span>Requires minimal care with no watering or sunlight needed</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-[#ee2b8c] mt-1 text-[5px]">●</span>
+            <span className="text-brand mt-1 text-[5px]">●</span>
             <span>Maintains its beauty, shape, and richness over time</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-[#ee2b8c] mt-1 text-[5px]">●</span>
+            <span className="text-brand mt-1 text-[5px]">●</span>
             <span>Protected from dust and moisture for long-lasting elegance</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-[#ee2b8c] mt-1 text-[5px]">●</span>
+            <span className="text-brand mt-1 text-[5px]">●</span>
             <span>Designed with forever flowers that offer an extended, timeless lifespan</span>
           </li>
         </ul>

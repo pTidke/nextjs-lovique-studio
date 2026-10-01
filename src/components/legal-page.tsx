@@ -12,19 +12,19 @@ export default function LegalPage({
 }) {
   return (
     <main className="min-h-screen bg-white animate-fade-up">
-      <section className="bg-[#fffafa] pt-40 pb-24 px-6">
+      <section className="bg-blush pt-40 pb-24 px-6">
         <div className="max-w-3xl mx-auto flex flex-col items-center text-center space-y-6">
           <span
-            className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-[#ee2b8c]`}
+            className={`${poppins.className} text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase text-brand`}
           >
             {eyebrow}
           </span>
           <h1
-            className={`${playfair.className} italic text-5xl md:text-7xl text-[#2a1b1b] leading-tight`}
+            className={`${playfair.className} italic text-5xl md:text-7xl text-ink leading-tight`}
           >
             {title}
           </h1>
-          <div className="w-16 h-px bg-[#ee2b8c]/30" />
+          <div className="w-16 h-px bg-brand/30" />
         </div>
       </section>
 

@@ -7,6 +7,7 @@ import { useState, useEffect, useRef, useId, useCallback } from "react";
 import { Instagram, Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDialog } from "@/lib/use-dialog";
+import { categories } from "@/lib/categories";
 
 export default function Header() {
   const pathname = usePathname();
@@ -181,15 +182,6 @@ function NavLinks({
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const categoriesButtonRef = useRef<HTMLButtonElement>(null);
   const categoriesId = useId();
-  const categories = [
-    { title: "Singles", value: "singles" },
-    { title: "Flower basket", value: "flower_basket" },
-    { title: "Bouquets", value: "bouquets" },
-    { title: "Flower pots", value: "flower_pots" },
-    { title: "Magazine", value: "magazine" },
-    { title: "Wall Art", value: "wall_art" },
-  ];
-
   // Base styles for links
   const baseLinkStyle = isMobile
     ? "text-xs font-bold tracking-[0.2em] uppercase text-gray-800 py-3" // Reduced size, cleaner tracking
@@ -269,8 +261,8 @@ function NavLinks({
               >
                 {categories.map((c) => (
                   <Link
-                    key={c.value}
-                    href={`/category/${c.value}`}
+                    key={c.slug}
+                    href={`/category/${c.slug}`}
                     onClick={onLinkClick}
                     className={`
                       block hover:text-pink-600 transition

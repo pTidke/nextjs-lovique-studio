@@ -1,6 +1,7 @@
 "use client";
 
 import useEmblaCarousel from "embla-carousel-react";
+import type { SanityImage as SanityImageData } from "@/sanity/types";
 import Autoplay from "embla-carousel-autoplay";
 import SanityImage from "@/components/sanity-image";
 import { useCallback, useState, useEffect, useRef } from "react";
@@ -9,22 +10,14 @@ import { urlFor } from "@/sanity/image";
 import { X, ZoomIn } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-type ImageType = {
-  asset?: { _ref?: string; url?: string };
-  url?: string;
-  lqip?: string;
-};
-
-const getImageUrl = (img: ImageType) =>
-  img?.asset?.url ||
-  (img?.asset?._ref ? urlFor(img.asset) : img?.url) ||
-  "";
+const getImageUrl = (img: SanityImageData) =>
+  img?.url || (img?.asset?._ref ? urlFor(img) : "");
 
 export default function Carousel({
   images: rawImages,
   name,
 }: {
-  images?: ImageType[] | null;
+  images?: SanityImageData[] | null;
   name: string;
 }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -127,7 +120,7 @@ export default function Carousel({
                   onClick={() => setLightboxOpen(true)}
                   tabIndex={idx === selectedIndex ? 0 : -1}
                   aria-label={`View image ${idx + 1} of ${images.length} full screen`}
-                  className="absolute inset-0 cursor-zoom-in rounded-2xl focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[#ee2b8c]"
+                  className="absolute inset-0 cursor-zoom-in rounded-2xl focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-brand"
                 />
               </div>
             );
@@ -142,7 +135,7 @@ export default function Carousel({
         {/* Navigation Arrows */}
         <button
           onClick={scrollPrev}
-          className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 backdrop-blur-md border border-pink-100/50 text-[#ee2b8c] rounded-full w-9 h-9 flex items-center justify-center text-lg hover:bg-white hover:scale-110 transition-all shadow-sm"
+          className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 backdrop-blur-md border border-pink-100/50 text-brand rounded-full w-9 h-9 flex items-center justify-center text-lg hover:bg-white hover:scale-110 transition-all shadow-sm"
           aria-label="Previous image"
         >
           ‹
@@ -150,7 +143,7 @@ export default function Carousel({
 
         <button
           onClick={scrollNext}
-          className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 backdrop-blur-md border border-pink-100/50 text-[#ee2b8c] rounded-full w-9 h-9 flex items-center justify-center text-lg hover:bg-white hover:scale-110 transition-all shadow-sm"
+          className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 backdrop-blur-md border border-pink-100/50 text-brand rounded-full w-9 h-9 flex items-center justify-center text-lg hover:bg-white hover:scale-110 transition-all shadow-sm"
           aria-label="Next image"
         >
           ›

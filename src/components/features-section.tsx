@@ -39,7 +39,7 @@ export default function FeaturesSection() {
               viewport={{ once: true }}
               className="flex flex-col items-center gap-4"
             >
-              <div className="text-[#ee2b8c] mb-2">
+              <div className="text-brand mb-2">
                 <feature.icon strokeWidth={1.5} className="w-10 h-10" />
               </div>
               <h3

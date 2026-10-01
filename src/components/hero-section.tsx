@@ -74,9 +74,9 @@ export default function HeroSection() {
       <div className="relative z-10 text-center max-w-4xl px-6 flex flex-col items-center gap-8">
         {/* Title */}
         <h1
-          className={`${playfair.className} italic text-6xl md:text-8xl lg:text-9xl text-[#2a1b1b] tracking-tight drop-shadow-sm`}
+          className={`${playfair.className} italic text-6xl md:text-8xl lg:text-9xl text-ink tracking-tight drop-shadow-sm`}
         >
-          Lovique <span className="text-[#ee2b8c]">Studio</span>
+          Lovique <span className="text-brand">Studio</span>
         </h1>
 
         {/* Subtitle */}
@@ -93,13 +93,13 @@ export default function HeroSection() {
         <div className="flex flex-col sm:flex-row gap-6 mt-8">
           <Link
             href="/catalogue"
-            className="bg-[#ee2b8c] text-white px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-[#d41b76] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+            className="bg-brand text-white px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-brand-dark transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
           >
             Explore Collection
           </Link>
           <Link
             href="/story"
-            className="bg-transparent border border-[#2a1b1b]/20 text-[#2a1b1b] px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white/50 transition-all hover:border-black"
+            className="bg-transparent border border-ink/20 text-ink px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] uppercase hover:bg-white/50 transition-all hover:border-black"
           >
             Our Story
           </Link>
