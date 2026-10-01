@@ -6,6 +6,7 @@ import { ArrowRight, Instagram } from "lucide-react";
 import { Playfair_Display, Poppins } from "next/font/google";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { formatPrice } from "@/lib/utils";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -154,9 +155,9 @@ export default function SignatureCollection({
                 >
                   {product.name}
                 </h3>
-                {product.price && (
+                {!!product.price && (
                   <p className={`${poppins.className} text-lg font-medium text-[#ee2b8c]`}>
-                    ₹{product.price}
+                    {formatPrice(product.price)}
                   </p>
                 )}
                 <p

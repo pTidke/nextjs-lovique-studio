@@ -31,6 +31,7 @@ export default async function CataloguePage() {
     _id: string;
     name: string;
     theme?: string;
+    price?: number;
     slug: { current: string };
     cover?: { url?: string };
     category?: string;

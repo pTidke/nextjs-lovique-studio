@@ -12,6 +12,7 @@ import { Playfair_Display } from "next/font/google";
 import { Instagram } from "lucide-react";
 import { Poppins } from "next/font/google";
 import { useRouter } from "next/navigation";
+import { formatPrice } from "@/lib/utils";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -126,9 +127,9 @@ export function ProductCard({
         >
           {name}
         </h3>
-        {price && (
+        {!!price && (
           <p className={`${poppins.className} text-lg font-medium text-[#ee2b8c]`}>
-            ₹{price}
+            {formatPrice(price)}
           </p>
         )}
         <p

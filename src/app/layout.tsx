@@ -44,7 +44,7 @@ export default function RootLayout({
         <Header />
         <NavigationTracker />
         <ScrollReset />
-        <main className="flex-1 relative z-10">{children}</main>
+        <div className="flex-1 relative z-10">{children}</div>
 
         {/* Footer */}
         <Footer />

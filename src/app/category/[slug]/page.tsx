@@ -3,6 +3,7 @@ import { PRODUCTS_BY_CATEGORY } from "@/sanity/queries";
 import { ProductCard } from "@/components/product-card";
 import { Playfair_Display, Poppins } from "next/font/google";
 import BrandBackground from "@/components/brand-background";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400"] });
@@ -71,6 +72,12 @@ export default async function CategoryPage({
   const { slug } = await params;
   const products = await client.fetch(PRODUCTS_BY_CATEGORY, { category: slug });
   const category = categoryMap[slug];
+
+  // Unknown slug with nothing in it — real 404 instead of an empty "Collection" page
+  if (!category && products.length === 0) {
+    notFound();
+  }
+
   const categoryTitle = category?.title || "Collection";
   const categoryDescription = category?.description || "Explore our curated selection, each designed with a touch of luxury and minimalism.";
 

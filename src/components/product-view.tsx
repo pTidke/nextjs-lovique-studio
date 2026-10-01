@@ -8,6 +8,13 @@ import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import BrandBackground from "@/components/brand-background";
+import { formatPrice } from "@/lib/utils";
+
+// Strips emoji only — keeps ₹, curly quotes, dashes and • bullets intact
+const EMOJI_REGEX = new RegExp(
+  "[\\p{Extended_Pictographic}\\u{1F1E6}-\\u{1F1FF}\\uFE0F\\u200D\\u20E3]",
+  "gu",
+);
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -162,9 +169,9 @@ export default function ProductView({
               >
                 {name}
               </h1>
-              {price && (
+              {!!price && (
                 <p className={`${poppins.className} text-2xl font-medium text-[#ee2b8c] mt-2`}>
-                  ₹{price}
+                  {formatPrice(price)}
                 </p>
               )}
               <div className="w-20 h-[1px] bg-[#ee2b8c]/20 mx-auto lg:mx-0" />
@@ -174,10 +181,7 @@ export default function ProductView({
               className={`${poppins.className} text-gray-500 leading-relaxed text-sm md:text-base font-light max-w-xl text-center lg:text-left space-y-4`}
             >
               {description
-                ?.replace(
-                  /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDDFF])/g,
-                  "",
-                )
+                ?.replace(EMOJI_REGEX, "")
                 .trim()
                 .split("\n")
                 .map((line, idx) => {
@@ -286,9 +290,9 @@ export default function ProductView({
                     >
                       {item.name}
                     </h3>
-                    {item.price && (
+                    {!!item.price && (
                       <p className={`${poppins.className} text-lg font-medium text-[#ee2b8c]`}>
-                        ₹{item.price}
+                        {formatPrice(item.price)}
                       </p>
                     )}
                     <p

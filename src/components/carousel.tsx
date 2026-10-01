@@ -13,22 +13,23 @@ type ImageType = {
   url?: string;
 };
 
+const getImageUrl = (img: ImageType) =>
+  img?.asset?.url ||
+  (img?.asset?._ref ? urlFor(img.asset) : img?.url) ||
+  "";
+
 export default function Carousel({
-  images,
+  images: rawImages,
   name,
 }: {
-  images: ImageType[];
+  images?: ImageType[] | null;
   name: string;
 }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  const getImageUrl = (img: ImageType) =>
-    img?.asset?.url
-      ? img.asset.url
-      : img?.asset?._ref
-        ? urlFor(img.asset)
-        : img?.url || "/placeholder.jpg";
+  // Drop images with no resolvable URL so we never render a broken src
+  const images = (rawImages ?? []).filter((img) => getImageUrl(img));
 
   // Auto-slide every 4 seconds
   const autoplay = Autoplay({ delay: 4000, stopOnInteraction: false });
@@ -59,6 +60,14 @@ export default function Carousel({
   }, [emblaApi, thumbsApi]);
 
   const scrollTo = (index: number) => emblaApi?.scrollTo(index);
+
+  if (images.length === 0) {
+    return (
+      <div className="w-full max-w-[480px] lg:max-w-[560px] aspect-[6/8] rounded-2xl border border-pink-100 bg-rose-50 flex items-center justify-center text-rose-400">
+        No image
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center w-full max-w-[480px] lg:max-w-[560px]">
